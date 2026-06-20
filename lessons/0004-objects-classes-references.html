@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 4 — Objects, Classes &amp; References</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 04 · Object-Oriented Programming</p>
+<h1>Objects, Classes &amp; References</h1>
+<p><em>The blueprint, the instance, and the pointer between them — and finally, why <code>==</code> lied about your name.</em></p>
+
+<div class="callout callout-mission">
+  <strong>The pivot.</strong> Everything so far was "Java the language." From here it's
+  "Java the way teams actually build software" — and it all rests on classes. You know
+  classes from Python, so we move fast on the idea and slow on two things: Java's syntax,
+  and the <em>reference model</em> you bumped into last lesson.
+</div>
+
+<h2>Class vs object</h2>
+<p>A <strong>class</strong> is a blueprint; an <strong>object</strong> is a thing built from it. You know this from Python — here it is side by side:</p>
+
+<pre><code># Python                          // Java
+class Dog:                        public class Dog {
+    def __init__(self, name, age):    String name;          // typed fields,
+        self.name = name              int age;              // declared up front
+        self.age = age
+
+                                      Dog(String name, int age) {   // constructor
+                                          this.name = name;         // = __init__,
+                                          this.age = age;           // named after class
+                                      }
+
+    def bark(self):                   String bark() {       // method, typed return
+        return f"{self.name} woof"        return name + " woof";
+                                      }
+                                  }
+
+d = Dog("Rex", 3)                 Dog d = new Dog("Rex", 3);   // note: new</code></pre>
+
+<p>Four differences to notice:</p>
+<ul>
+  <li><strong>Fields are declared with types</strong> at the top (<code>String name;</code>), not invented inside <code>__init__</code>.</li>
+  <li><strong>The constructor is named after the class</strong> (<code>Dog(...)</code>), not <code>__init__</code>. It's the code that runs when you build an object.</li>
+  <li><strong><code>this</code></strong> is Python's <code>self</code> — but you <em>don't</em> list it as a parameter. Java passes it for you.</li>
+  <li><strong><code>new</code></strong> actually builds the object. <code>new Dog("Rex", 3)</code> = "construct a fresh Dog."</li>
+</ul>
+
+<h2>The reference model — your <code>==</code> answer</h2>
+<p>This is the important part. When you write:</p>
+<pre><code>Dog d = new Dog("Rex", 3);</code></pre>
+<p>
+<code>d</code> does <strong>not</strong> hold the Dog. It holds a <strong>reference</strong> —
+an arrow pointing to the Dog object, which lives elsewhere in memory. This is the split you
+discovered last lesson:
+</p>
+
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem; margin:1rem 0;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Kind</th><th>The variable holds…</th><th>Examples</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>Primitive</strong></td><td>the value itself</td><td><code>int</code>, <code>double</code>, <code>boolean</code>, <code>char</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>Reference type</strong></td><td>an arrow to an object</td><td><code>String</code>, <code>Dog</code>, arrays, everything capitalised</td></tr>
+</table>
+
+<p>So when two variables point at the same object, copying one copies the <em>arrow</em>, not the object:</p>
+<pre><code>Dog a = new Dog("Rex", 3);
+Dog b = a;          // copies the arrow — same Dog!
+b.age = 4;
+// a.age is now 4 too — a and b point at ONE object
+
+Dog c = new Dog("Rex", 3);   // a different object, same contents
+System.out.println(a == c);  // false — two different objects (arrows differ)</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight — <code>==</code> resolved</h3>
+  <code>==</code> compares the <em>arrows</em>: "do these point at the same object?"
+  For primitives there's no arrow, so <code>==</code> compares values — which is why it
+  works for <code>int</code>. For objects it compares identity, which is why
+  <code>name == "Jonas"</code> only worked by the pool coincidence. <code>.equals()</code>
+  exists to compare <em>contents</em> instead. Mystery closed.
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="2">
+  <div class="q">What does <code>new Dog("Rex", 3)</code> do?</div>
+  <button class="opt" data-explain="That describes the class, the blueprint — not new.">Defines the Dog blueprint</button>
+  <button class="opt" data-explain="this/self refers inside a method; it doesn't build objects.">Renames the current object</button>
+  <button class="opt" data-explain="new constructs a fresh object from the class.">Builds a new Dog object</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">After <code>Dog b = a;</code> then <code>b.age = 4;</code>, what is <code>a.age</code>?</div>
+  <button class="opt" data-explain="b copied a's arrow — they share one object.">4 — same object as b</button>
+  <button class="opt" data-explain="b is not an independent copy of the object.">3 — a is unchanged</button>
+  <button class="opt" data-explain="The assignment is valid; nothing errors.">A compile error</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">In Java's constructor, what plays the role of Python's <code>self</code>?</div>
+  <button class="opt" data-explain="new builds objects; it isn't the in-method reference.">The keyword new</button>
+  <button class="opt" data-explain="this is the current object — and it's passed implicitly.">The keyword this</button>
+  <button class="opt" data-explain="There's no such parameter in Java constructors.">A self parameter</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now</h2>
+<p>Create <code>Dog.java</code> — one file, blueprint plus a <code>main</code> to try it:</p>
+<pre><code>public class Dog {
+    String name;
+    int age;
+
+    Dog(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    String bark() {
+        return name + " says woof";
+    }
+
+    public static void main(String[] args) {
+        Dog a = new Dog("Rex", 3);
+        Dog b = a;            // same object
+        b.age = 4;
+        System.out.println(a.name + " is " + a.age);   // age is 4 — why?
+        System.out.println(a.bark());
+
+        Dog c = new Dog("Rex", 4);   // different object, same contents
+        System.out.println("a == b? " + (a == b));     // true  (same arrow)
+        System.out.println("a == c? " + (a == c));     // false (different objects)
+    }
+}</code></pre>
+<ol>
+  <li><code>javac Dog.java</code>, <code>java Dog</code>. Confirm <code>a.age</code> became 4 — say out loud why.</li>
+  <li>Add a second method, e.g. <code>String describe()</code> returning <code>name + ", age " + age</code>, and print it.</li>
+  <li>Predict each <code>==</code> result <em>before</em> running. Getting these right means the reference model has clicked.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/classes-objects/">dev.java — Classes &amp; Objects</a>.
+  The official walkthrough of defining classes, constructors, and creating objects. Read after this lesson.
+</p>
+
+<div class="callout callout-ask">
+  <strong>Questions?</strong> Where do objects actually live in memory (the "heap")?
+  Why is <code>main</code> inside the class? What's <code>null</code> (an arrow pointing at
+  nothing)? Ask me — and next lesson we make these fields <em>private</em> and add getters,
+  which is <strong>encapsulation</strong>, the first of the OO pillars on your syllabus.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0003-control-flow.html">← Lesson 03</a></span>
+  <span><a href="../reference/java-classes.html">Reference: classes &amp; objects →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

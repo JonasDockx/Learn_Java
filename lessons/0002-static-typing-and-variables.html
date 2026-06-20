@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 2 — Static Typing &amp; Variables</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 02 · Fundamentals</p>
+<h1>Static Typing &amp; Variables</h1>
+<p><em>Why every Java variable has a type stamped on it for life — and why that's the compiler working <strong>for</strong> you.</em></p>
+
+<div class="callout callout-mission">
+  <strong>Building on Lesson 1.</strong> You saw that <code>javac</code> checks types
+  before producing bytecode. This lesson is about <em>where those types come from</em>:
+  you declare them. That single habit is the biggest day-to-day difference between
+  writing Python and writing Java.
+</div>
+
+<h2>The Python contrast</h2>
+<p>In Python, a name is just a label you can stick on anything, and re-stick whenever you like:</p>
+<pre><code># Python — totally fine
+x = 5
+x = "now I'm a string"
+x = [1, 2, 3]</code></pre>
+
+<p>In Java, a variable is born with a <strong>type</strong>, and that type never changes. You declare it once, on the left:</p>
+<pre><code>// Java — the type comes first
+int x = 5;
+x = 10;            // fine — still an int
+x = "hello";       // COMPILE ERROR — x is an int, forever</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  In Python the <em>value</em> knows its type; the variable is just a label. In Java
+  the <em>variable</em> has the type, fixed at declaration. The compiler uses that
+  promise to catch mistakes — <code>x = "hello"</code> never even builds, so it can
+  never blow up at runtime.
+</div>
+
+<h2>The types you'll use constantly</h2>
+<p>Java splits into <strong>primitives</strong> (lowercase, simple values) and <strong>objects</strong> (capitalised, like <code>String</code>). The handful you'll reach for daily:</p>
+
+<pre><code>int     count   = 42;          // whole numbers
+double  price   = 19.99;       // decimals
+boolean isReady = true;        // true / false  (note: lowercase!)
+char    grade   = 'A';         // a single character, single quotes
+String  name    = "Jonas";     // text, double quotes, capital S</code></pre>
+
+<ul>
+  <li><code>int</code> vs <code>double</code>: Python has one <code>int</code> and one <code>float</code>; Java makes you choose the size/kind up front. Start with <code>int</code> for whole numbers, <code>double</code> for decimals.</li>
+  <li><code>boolean</code> is <code>true</code>/<code>false</code> — lowercase, unlike Python's <code>True</code>/<code>False</code>.</li>
+  <li><code>char</code> is a <em>single</em> character in <strong>single quotes</strong>; <code>String</code> is text in <strong>double quotes</strong>. Mixing the quotes up is a common first-week error.</li>
+</ul>
+
+<h2>Let the compiler write the type: <code>var</code></h2>
+<p>Modern Java (10+) can infer the type from the value, so you don't always repeat yourself:</p>
+<pre><code>var count = 42;        // compiler infers: int
+var name  = "Jonas";   // compiler infers: String</code></pre>
+<p>
+This <em>looks</em> like Python, but it's not the same: <code>count</code> is still
+permanently an <code>int</code> — you just didn't type the word. <code>count = "x"</code>
+still won't compile. Use <code>var</code> when the type is obvious from the right-hand
+side; write the type explicitly when it adds clarity.
+</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="2">
+  <div class="q">In Java, after <code>int x = 5;</code>, what does <code>x = "hi";</code> do?</div>
+  <button class="opt" data-explain="That's Python behaviour — the label rebinds to any value.">Rebinds x to hold text now</button>
+  <button class="opt" data-explain="It doesn't run at all — it never compiles.">Throws an error while running</button>
+  <button class="opt" data-explain="x is locked to int, so javac rejects it before building.">Fails to compile at javac time</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">Which declaration correctly stores the text <code>Jonas</code>?</div>
+  <button class="opt" data-explain="String is capitalised and text uses double quotes.">String name = "Jonas";</button>
+  <button class="opt" data-explain="char holds one character in single quotes, not a word.">char name = 'Jonas';</button>
+  <button class="opt" data-explain="string is lowercase here and quotes are wrong.">string name = 'Jonas';</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">What does <code>var total = 19.99;</code> make <code>total</code>?</div>
+  <button class="opt" data-explain="var is not a dynamic type; it infers a fixed one.">A flexible Python-style name</button>
+  <button class="opt" data-explain="The compiler infers double from the decimal literal, permanently.">A double, inferred and fixed</button>
+  <button class="opt" data-explain="A decimal literal infers double, not int.">An int rounded down to 19</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now</h2>
+<p>Make a file <code>Types.java</code> and run it:</p>
+<pre><code>public class Types {
+    public static void main(String[] args) {
+        int count = 3;
+        double price = 19.99;
+        String name = "Jonas";
+        boolean isReady = true;
+
+        System.out.println(name + " has " + count + " items, $" + price);
+        System.out.println("Ready? " + isReady);
+    }
+}</code></pre>
+<ol>
+  <li><code>javac Types.java</code> then <code>java Types</code> — see the output. Notice <code>+</code> glues strings and numbers together into text.</li>
+  <li>Now add the line <code>count = "four";</code> before the print and recompile. Read the compiler error — it will name the types. That's static typing protecting you.</li>
+  <li>Change one <code>int</code> to <code>var</code> and confirm it still works.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/language-basics/using-the-var-type-identifier/">dev.java — Primitive types &amp; <code>var</code></a>.
+  The official, modern explanation of Java's types and type inference. Read after this lesson.
+</p>
+
+<div class="callout callout-ask">
+  <strong>Questions?</strong> Confused about <code>int</code> vs <code>double</code>,
+  or when to use <code>var</code>? Wondering why <code>String</code> is capitalised but
+  <code>int</code> isn't? Ask me in the chat — that distinction (primitives vs objects)
+  is a real one and I'm happy to unpack it.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0001-how-java-runs.html">← Lesson 01</a></span>
+  <span><a href="../reference/java-types.html">Reference: types &amp; variables →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

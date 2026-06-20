@@ -1,0 +1,90 @@
+/* Shared stylesheet for the Learn Java course.
+   Tufte-inspired: generous margins, readable measure, restrained palette.
+   Every lesson and reference doc links this file. */
+
+:root {
+  --ink: #1a1a1a;
+  --ink-soft: #555;
+  --paper: #fdfdf9;
+  --rule: #d8d4c8;
+  --accent: #b3402f;      /* Java mug red-brown */
+  --accent-soft: #f4e7df;
+  --code-bg: #f4f2ec;
+  --good: #2e7d32;
+  --bad: #b3402f;
+  --measure: 38rem;
+  --font-body: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+  max-width: var(--measure);
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+  font-size: 1.05rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { line-height: 1.2; font-weight: 600; }
+h1 { font-size: 2rem; margin-bottom: 0.2rem; }
+h2 { font-size: 1.4rem; margin-top: 2.5rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
+h3 { font-size: 1.1rem; margin-top: 1.8rem; color: var(--ink-soft); }
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  margin-bottom: 0.5rem;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+a:hover { border-bottom-color: var(--accent); }
+
+code { font-family: var(--font-mono); font-size: 0.85em; background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 3px; }
+pre { background: var(--code-bg); padding: 1rem 1.2rem; border-radius: 6px; overflow-x: auto; border-left: 3px solid var(--accent); }
+pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.45; }
+
+blockquote { border-left: 3px solid var(--rule); margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.2rem; color: var(--ink-soft); font-style: italic; }
+
+/* Callout boxes */
+.callout { border-radius: 6px; padding: 1rem 1.2rem; margin: 1.5rem 0; font-size: 0.95rem; }
+.callout-key { background: var(--accent-soft); border: 1px solid var(--accent); }
+.callout-mission { background: #eef3ee; border: 1px solid var(--good); }
+.callout-ask { background: #fff; border: 1px dashed var(--ink-soft); color: var(--ink-soft); }
+.callout h3 { margin-top: 0; color: var(--ink); }
+
+/* Source / citation line */
+.source { font-size: 0.85rem; color: var(--ink-soft); }
+.source::before { content: "📖 Primary source — "; font-family: var(--font-mono); font-size: 0.75rem; }
+
+/* Quiz widget hooks (styled here, behaviour in quiz.js) */
+.quiz { border: 1px solid var(--rule); border-radius: 6px; padding: 1.2rem; margin: 1.5rem 0; background: #fff; }
+.quiz .q { font-weight: 600; margin-bottom: 0.8rem; }
+.quiz button.opt {
+  display: block; width: 100%; text-align: left; margin: 0.4rem 0;
+  padding: 0.6rem 0.9rem; border: 1px solid var(--rule); border-radius: 5px;
+  background: var(--paper); font-family: var(--font-body); font-size: 0.95rem; cursor: pointer;
+}
+.quiz button.opt:hover { border-color: var(--accent); }
+.quiz button.opt.correct { background: #e7f3e7; border-color: var(--good); }
+.quiz button.opt.wrong { background: var(--accent-soft); border-color: var(--bad); }
+.quiz .feedback { margin-top: 0.8rem; font-size: 0.9rem; min-height: 1.2rem; }
+
+/* Footer nav between lessons */
+.lesson-nav { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-family: var(--font-mono); font-size: 0.85rem; }
+
+footer { margin-top: 3rem; font-size: 0.8rem; color: var(--ink-soft); text-align: center; }
+
+@media print {
+  body { margin: 0; max-width: none; font-size: 11pt; }
+  .quiz button.opt { border: 1px solid #999; }
+  a { color: var(--ink); border: none; }
+}

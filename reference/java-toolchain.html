@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — The Java Toolchain</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>The Java Toolchain</h1>
+<p><em>Quick reference for the compile-and-run pipeline. Print this.</em></p>
+
+<h2>The pipeline</h2>
+<pre><code>  Foo.java  ──[ javac Foo.java ]──▶  Foo.class  ──[ java Foo ]──▶  output
+  source           compile             bytecode        run (JVM)</code></pre>
+
+<h2>The three tools</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;">
+    <th style="padding:0.4rem;">Tool</th><th>What it is</th><th>You use it to</th>
+  </tr>
+  <tr style="border-bottom:1px solid var(--rule);">
+    <td style="padding:0.4rem;"><code>JDK</code></td><td>Java Development Kit</td><td>The whole bundle — compiler + runtime + tools. Install this.</td>
+  </tr>
+  <tr style="border-bottom:1px solid var(--rule);">
+    <td style="padding:0.4rem;"><code>javac</code></td><td>The compiler</td><td>Turn <code>.java</code> source into <code>.class</code> bytecode.</td>
+  </tr>
+  <tr style="border-bottom:1px solid var(--rule);">
+    <td style="padding:0.4rem;"><code>java</code></td><td>The launcher (JVM)</td><td>Execute a compiled class's <code>main</code> method.</td>
+  </tr>
+</table>
+
+<h2>Commands you'll actually type</h2>
+<pre><code>java -version          # check the runtime is installed
+javac -version         # check the compiler is installed
+
+javac Hello.java       # compile  → Hello.class
+java Hello             # run      → (no .class extension!)</code></pre>
+
+<h2>Rules to remember</h2>
+<ul>
+  <li>A <code>public class</code> must live in a file of the <strong>same name</strong>: <code>public class Hello</code> → <code>Hello.java</code>.</li>
+  <li>Compile <strong>with</strong> the extension (<code>Hello.java</code>); run <strong>without</strong> it (<code>Hello</code>).</li>
+  <li>Every runnable program needs <code>public static void main(String[] args)</code> — the entry point.</li>
+  <li>Statements end in <code>;</code>. Blocks use <code>{ }</code>.</li>
+</ul>
+
+<div class="callout callout-key">
+  <h3>Mental model</h3>
+  <code>javac</code> is the gatekeeper — it won't emit bytecode if your types
+  don't check out. <code>java</code> is the engine — it runs the bytecode the same
+  way on any OS. Source is for humans, bytecode is for the JVM.
+</div>
+
+<p class="source">
+  <a href="https://docs.oracle.com/javase/tutorial/getStarted/cupojava/index.html">Oracle — The "Hello World!" Application</a>.
+  The canonical reference for the compile/run cycle across operating systems.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0001-how-java-runs.html">← Lesson 01</a></span>
+  <span>Reference</span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

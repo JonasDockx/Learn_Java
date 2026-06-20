@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Types &amp; Variables</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Types &amp; Variables</h1>
+<p><em>The everyday types and the rules for declaring them. Print this.</em></p>
+
+<h2>Declaration shape</h2>
+<pre><code>  type   name   =   value ;
+  int    count  =   42    ;</code></pre>
+<p>The type is fixed for the variable's whole life. Re-assigning a different type = compile error.</p>
+
+<h2>The primitives you'll use</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;">
+    <th style="padding:0.4rem;">Type</th><th>Holds</th><th>Example</th><th>Python ~</th>
+  </tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>int</code></td><td>whole numbers</td><td><code>int n = 42;</code></td><td><code>int</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>long</code></td><td>big whole numbers</td><td><code>long big = 9000000000L;</code></td><td><code>int</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>double</code></td><td>decimals</td><td><code>double p = 19.99;</code></td><td><code>float</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>boolean</code></td><td>true / false</td><td><code>boolean ok = true;</code></td><td><code>bool</code> (but lowercase!)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>char</code></td><td>one character</td><td><code>char g = 'A';</code></td><td>1-char <code>str</code></td></tr>
+</table>
+
+<h2>The object type you'll use most</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Type</th><th>Holds</th><th>Example</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>String</code></td><td>text (capital S)</td><td><code>String s = "Jonas";</code></td></tr>
+</table>
+
+<h2>Quote rules (easy to trip on)</h2>
+<ul>
+  <li><strong>Double quotes</strong> → <code>String</code>: <code>"Jonas"</code></li>
+  <li><strong>Single quotes</strong> → <code>char</code>: <code>'A'</code></li>
+  <li><code>boolean</code> values are <code>true</code> / <code>false</code> — <em>lowercase</em> (Python uses <code>True</code>/<code>False</code>).</li>
+</ul>
+
+<h2><code>var</code> — inferred, not dynamic</h2>
+<pre><code>var count = 42;       // inferred int   — still fixed forever
+var name  = "Jonas";  // inferred String
+var x;                // ERROR — needs a value to infer from</code></pre>
+
+<div class="callout callout-key">
+  <h3>Mental model</h3>
+  Python: the <em>value</em> carries the type, the name is a free label.<br>
+  Java: the <em>variable</em> carries the type, stamped at declaration and never changed.
+  <code>var</code> just lets the compiler fill in the stamp for you.
+</div>
+
+<h2>String joining</h2>
+<pre><code>String name = "Jonas";
+int count = 3;
+System.out.println(name + " has " + count);   // + glues into text</code></pre>
+
+<p class="source">
+  <a href="https://dev.java/learn/language-basics/datatypes/">dev.java — Primitive Data Types</a>.
+  The authoritative list with exact ranges for each primitive.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0002-static-typing-and-variables.html">← Lesson 02</a></span>
+  <span><a href="java-toolchain.html">Toolchain reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

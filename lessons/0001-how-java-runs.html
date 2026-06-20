@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 1 — How Java Runs</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 01 · Fundamentals</p>
+<h1>How Java Runs</h1>
+<p><em>From source to bytecode to the JVM — the one mental shift that separates Java from Python.</em></p>
+
+<div class="callout callout-mission">
+  <strong>Why this, first?</strong> You already program in Python. The fastest way to
+  start thinking in Java is to understand what happens between you saving a file and
+  the program running — because unlike Python, there's a <em>compile step</em> in the
+  middle, and it changes how you work every single day on the job.
+</div>
+
+<h2>The shift from Python</h2>
+<p>
+When you run Python, the interpreter reads your source and executes it directly —
+you save <code>app.py</code>, you run <code>python app.py</code>, done. Java inserts
+a step. You don't run your source code; you run a <em>compiled</em> version of it.
+</p>
+
+<pre><code>  Python:   app.py  ───────────────▶  python runs it
+
+  Java:     App.java  ──[ javac ]──▶  App.class  ──[ java ]──▶  JVM runs it
+            (source)    compile        (bytecode)    launch</code></pre>
+
+<p>Three nouns to lock in:</p>
+<ul>
+  <li><strong>Source</strong> — the <code>.java</code> file you write, human-readable.</li>
+  <li><strong>Bytecode</strong> — the <code>.class</code> file <code>javac</code> produces. Not machine code, not readable — an intermediate the JVM understands.</li>
+  <li><strong>JVM</strong> (Java Virtual Machine) — the program that executes bytecode. It's why Java is <em>"write once, run anywhere"</em>: the same <code>.class</code> file runs on any machine with a JVM.</li>
+</ul>
+
+<h2>Your first compile-and-run</h2>
+<p>Create a file called <code>Hello.java</code>. The filename <em>must</em> match the class name — that's a Java rule, not a suggestion.</p>
+
+<pre><code>public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java");
+    }
+}</code></pre>
+
+<p>Then, in a terminal, two commands:</p>
+<pre><code>javac Hello.java     # compile  → produces Hello.class
+java Hello           # run      → prints: Hello, Java</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  Notice you compile <code>Hello.java</code> (with the extension) but run
+  <code>Hello</code> (no extension, no <code>.class</code>). You're handing the
+  <em>class name</em> to the JVM and asking it to find and execute that class's
+  <code>main</code> method. <code>main</code> is always the entry point.
+</div>
+
+<h2>Why the compile step earns its keep</h2>
+<p>
+That extra step is the payoff of Java's <strong>static typing</strong>. In
+Python, a mistake like <code>len(5)</code> or adding a number to a string blows up
+only when that line actually runs — a <code>TypeError</code> at runtime. In Java,
+the compiler refuses to produce a <code>.class</code> file at all if the types
+don't line up — so a whole category of bugs is caught at <code>javac</code> time,
+before the program ever runs. On a team, that's fewer things breaking in
+production. We'll go deep on types in Lesson 2.
+</p>
+
+<h2>Check yourself</h2>
+<p>Retrieval practice — answer before you reveal. This is what makes it stick.</p>
+
+<div class="quiz" data-answer="1">
+  <div class="q">Which file does the JVM actually execute?</div>
+  <button class="opt" data-explain="That's the source you write; javac reads it.">The Hello.java file</button>
+  <button class="opt" data-explain="javac compiles source into this bytecode; java runs it.">The Hello.class file</button>
+  <button class="opt" data-explain="There is no such file in this pipeline.">The Hello.jvm file</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Why can Java catch a type mismatch before the program runs?</div>
+  <button class="opt" data-explain="Speed isn't the reason; the check is about types.">Because the JVM runs very fast today</button>
+  <button class="opt" data-explain="Reading code aloud isn't a language mechanism.">Because you read the source aloud first</button>
+  <button class="opt" data-explain="Static typing lets javac reject bad code at compile time.">Because javac checks the types while compiling</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now</h2>
+<ol>
+  <li>Install a JDK if you haven't — verify with <code>java -version</code> and <code>javac -version</code> in a terminal.</li>
+  <li>Create <code>Hello.java</code>, compile it, run it. Watch the <code>.class</code> file appear.</li>
+  <li>Break it on purpose: change <code>println</code> to <code>printline</code> and run <code>javac</code> again. Read the error. That's the compiler doing its job.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/getting-started/">dev.java — Getting Started with Java</a>.
+  The official, modern walkthrough of installing a JDK and running your first program. Skim it after this lesson.
+</p>
+
+<div class="callout callout-ask">
+  <strong>Stuck, or curious?</strong> I'm your teacher for this — ask me anything.
+  JDK won't install? <code>javac</code> "not recognized"? Want to know what bytecode
+  actually looks like? Just ask in the chat and we'll sort it out.
+</div>
+
+<div class="lesson-nav">
+  <span>● Lesson 01</span>
+  <span><a href="../reference/java-toolchain.html">Reference: the toolchain →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

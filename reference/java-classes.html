@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Classes &amp; Objects</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Classes &amp; Objects</h1>
+<p><em>Anatomy of a class and the reference model. Print this.</em></p>
+
+<h2>Anatomy of a class</h2>
+<pre><code>public class Dog {        // blueprint
+    String name;          // field   (typed, declared up top)
+    int age;              // field
+
+    Dog(String name, int age) {   // constructor (named after the class)
+        this.name = name;         // this = Python's self (implicit)
+        this.age  = age;
+    }
+
+    String bark() {       // method  (typed return)
+        return name + " woof";
+    }
+}</code></pre>
+
+<h2>Python → Java map</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Python</th><th>Java</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>class Dog:</code></td><td><code>public class Dog {</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>def __init__(self, …)</code></td><td><code>Dog(…)</code> (constructor)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>self</code></td><td><code>this</code> (implicit, not a param)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>d = Dog("Rex", 3)</code></td><td><code>Dog d = new Dog("Rex", 3);</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">fields invented in <code>__init__</code></td><td>fields declared with types up top</td></tr>
+</table>
+
+<h2>Primitive vs reference</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Kind</th><th>Variable holds</th><th><code>==</code> compares</th><th>Examples</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Primitive</td><td>the value</td><td>values</td><td><code>int double boolean char</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Reference</td><td>an arrow to an object</td><td>identity (same object?)</td><td><code>String Dog</code> arrays</td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>Reference rules</h3>
+  <pre><code>Dog b = a;        // copies the ARROW — a and b share one object
+b.age = 4;        // visible through a too
+a == c            // true only if a and c are the SAME object
+a.equals(c)       // compares contents — IF the class defines equals()
+null              // an arrow pointing at nothing</code></pre>
+</div>
+
+<h2>Run a class with a <code>main</code></h2>
+<pre><code>javac Dog.java     // compile
+java Dog           // runs Dog's main method</code></pre>
+
+<p class="source">
+  <a href="https://dev.java/learn/classes-objects/">dev.java — Classes &amp; Objects</a>. The authoritative reference.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0004-objects-classes-references.html">← Lesson 04</a></span>
+  <span><a href="java-control-flow.html">Control-flow reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

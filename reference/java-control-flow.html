@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Control Flow</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Control Flow</h1>
+<p><em>Conditionals, loops, and operators — Python on the left, Java on the right. Print this.</em></p>
+
+<h2>Boolean operators</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Python</th><th>Java</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>and</code></td><td><code>&amp;&amp;</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>or</code></td><td><code>||</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>not x</code></td><td><code>!x</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>==</code> / <code>!=</code></td><td><code>==</code> / <code>!=</code> (primitives only)</td></tr>
+</table>
+
+<h2>if / else if / else</h2>
+<pre><code>if (age &gt;= 18 &amp;&amp; ok) {
+    ...
+} else if (age &gt; 0) {
+    ...
+} else {
+    ...
+}</code></pre>
+<p>Condition in <code>( )</code>, body in <code>{ }</code>. <code>else if</code> is Java's <code>elif</code>.</p>
+
+<h2>Loops</h2>
+<pre><code>// for-each  (Python: for s in scores)
+for (int s : scores) { ... }
+
+// classic for  — start ; keep-going ; step
+for (int i = 0; i &lt; scores.length; i++) { ... }
+
+// while
+while (n &gt; 0) { n--; }</code></pre>
+<p><code>i++</code> = add 1 · <code>n--</code> = subtract 1 · <code>arr.length</code> = size (no parentheses).</p>
+
+<div class="callout callout-key">
+  <h3>The String comparison rule</h3>
+  <pre><code>name.equals("Jonas")   // ✔ compares text — use for String/objects
+name == "Jonas"        // ✗ compares identity — only for primitives</code></pre>
+  Primitives (<code>int</code>, <code>double</code>, <code>boolean</code>, <code>char</code>) → <code>==</code>.
+  Objects (<code>String</code>, …) → <code>.equals()</code>.
+</div>
+
+<p class="source">
+  <a href="https://dev.java/learn/language-basics/controlling-flow/">dev.java — Controlling the Flow</a>.
+  Official reference, including <code>switch</code> (not yet covered).
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0003-control-flow.html">← Lesson 03</a></span>
+  <span><a href="java-types.html">Types reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

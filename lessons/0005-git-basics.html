@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 5 — Git Basics</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 05 · Version Control</p>
+<h1>Git Basics</h1>
+<p><em>Turn this very folder into a versioned project — and make your first commits from the Java files you've already written.</em></p>
+
+<div class="callout callout-mission">
+  <strong>Why now?</strong> You have five real <code>.java</code> files in this folder and
+  no safety net. Git is that net: a series of save points you can return to, compare, and
+  share. Every team you'll ever join runs on it, and "can you use Git" is assumed on day one
+  of a junior role. We'll learn it on <em>your own</em> files, not toy examples.
+</div>
+
+<h2>The one mental model</h2>
+<p>Git work happens in three places. Almost everything you do is moving changes rightward:</p>
+<pre><code>  Working directory  ──[ git add ]──▶  Staging area  ──[ git commit ]──▶  Repository
+  (your files,                          (changes you've               (permanent
+   edited live)                          chosen for the               save points /
+                                         next save point)              history)</code></pre>
+<p>
+The <strong>staging area</strong> is the part newcomers miss. It lets you pick <em>exactly</em>
+which changes go into the next commit — you might edit four files but commit only two. Think of
+it as the box you load before sealing it shut with <code>commit</code>.
+</p>
+
+<h2>One-time setup</h2>
+<p>Git needs to know who's making the commits. Set this once per machine:</p>
+<pre><code>git config --global user.name  "Jonas Dockx"
+git config --global user.email "dockxjonas@gmail.com"</code></pre>
+
+<h2>The core loop</h2>
+<pre><code>git init               # turn the current folder into a Git repo (run once)
+git status             # what's changed? (run this constantly — it's your radar)
+git add Hello.java     # stage one file...
+git add .              # ...or stage everything that changed
+git commit -m "Add first Java practice files"   # seal a save point with a message
+git log --oneline      # see your history of commits</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key habit</h3>
+  <code>git status</code> is your most-used command — run it before and after every
+  <code>add</code> and <code>commit</code> to see exactly what Git thinks is going on.
+  A good commit message finishes the sentence "If applied, this commit will…" —
+  e.g. <em>"Add Dog class demonstrating references."</em> Present tense, specific.
+</div>
+
+<h2>Keeping junk out: <code>.gitignore</code></h2>
+<p>
+Some files should never be committed: compiled <code>.class</code> files (regenerated every
+build), IDE settings, OS clutter, and — critically — <strong>secrets</strong> like keys and
+passwords. A <code>.gitignore</code> file lists patterns Git should pretend it can't see.
+I've put a ready-made one in this folder; open <a href="../.gitignore">.gitignore</a> and read it.
+</p>
+<pre><code>*.class      # bytecode — never commit; javac regenerates it
+target/      # build output (later lessons)
+id_rsa       # an SSH private key — committing a secret = treat it as leaked
+.env         # environment files with tokens/passwords</code></pre>
+<blockquote>
+  Rule that's saved many careers: a secret committed even once lives in history forever.
+  <code>.gitignore</code> <em>before</em> the first <code>git add</code>, not after.
+</blockquote>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">What does <code>git add</code> do?</div>
+  <button class="opt" data-explain="commit seals the save point; add doesn't.">Permanently saves a commit</button>
+  <button class="opt" data-explain="Right — it moves changes into the staging area.">Stages changes for the next commit</button>
+  <button class="opt" data-explain="git init creates the repo, not add.">Creates a new repository</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Why list <code>*.class</code> in <code>.gitignore</code>?</div>
+  <button class="opt" data-explain="They aren't secret — they're just regenerable.">Because they contain passwords</button>
+  <button class="opt" data-explain="Ignoring a file doesn't speed up Git meaningfully.">To make commits run faster</button>
+  <button class="opt" data-explain="Bytecode is rebuilt by javac, so it's noise in history.">They're rebuilt by javac anyway</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">Which command shows what's currently changed but uncommitted?</div>
+  <button class="opt" data-explain="Yes — status is your radar, use it constantly.">git status</button>
+  <button class="opt" data-explain="init creates the repo; it doesn't report changes.">git init</button>
+  <button class="opt" data-explain="commit saves; it doesn't list pending changes.">git commit</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now</h2>
+<p>In a terminal in this folder (<code>Learn_Java</code>):</p>
+<ol>
+  <li>Set your name/email with the two <code>git config</code> commands above (once).</li>
+  <li><code>git init</code> — then <code>git status</code>. Notice your <code>.class</code> files are <em>not</em> listed (the <code>.gitignore</code> is already working).</li>
+  <li><code>git add .</code> then <code>git status</code> again — watch files turn green (staged).</li>
+  <li><code>git commit -m "Add Java fundamentals practice files"</code> — your first save point.</li>
+  <li>Edit one file (add a comment), then <code>git status</code>, <code>git add</code>, and commit again with a clear message.</li>
+  <li><code>git log --oneline</code> — see your two commits. That's your history.</li>
+</ol>
+
+<p class="source">
+  <a href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository">Pro Git — Recording Changes to the Repository</a>.
+  The canonical, free explanation of the add/commit cycle. Read after this lesson.
+</p>
+
+<div class="callout callout-ask">
+  <strong>Questions?</strong> What's the difference between <code>git add .</code> and
+  naming files? What if you commit something by mistake? When do branches come in?
+  Ask me — and the <strong>next Git lesson</strong> covers branching and pushing to GitHub,
+  so your work lives somewhere other than this laptop.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0004-objects-classes-references.html">← Lesson 04</a></span>
+  <span><a href="../reference/git-basics.html">Reference: Git commands →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
