@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Branching, Remotes &amp; Undo</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Branching, Remotes &amp; Undo</h1>
+<p><em>The team workflow, plus how to fix mistakes. Print this.</em></p>
+
+<h2>Branching</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Command</th><th>Does</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git switch -c name</code></td><td>create a branch and move onto it</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git switch name</code></td><td>move onto an existing branch</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git branch</code></td><td>list branches (current one starred)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git merge name</code></td><td>fold <code>name</code> into the current branch</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git branch -d name</code></td><td>delete a merged branch</td></tr>
+</table>
+
+<h2>Remotes (GitHub)</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Command</th><th>Does</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git remote add origin &lt;url&gt;</code></td><td>link a remote named <code>origin</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git push -u origin main</code></td><td>first push (remembers the link)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git push</code> / <code>git pull</code></td><td>send / receive commits thereafter</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>git clone &lt;url&gt;</code></td><td>copy a remote repo down fresh</td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>The team loop</h3>
+  branch → commit → <code>push</code> branch → open <strong>Pull Request</strong> → review → merge.
+  The PR is where teammates review your code before it joins <code>main</code>.
+</div>
+
+<h2>Fixing mistakes</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Situation</th><th>Fix</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Staged a file by mistake (not committed)</td><td><code>git restore --staged &lt;file&gt;</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Discard uncommitted edits to a file</td><td><code>git restore &lt;file&gt;</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Wrong message / forgot a file — <em>not pushed</em></td><td><code>git commit --amend</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Undo last commit, keep the edits</td><td><code>git reset --soft HEAD~1</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Already pushed it</td><td><code>git revert &lt;commit&gt;</code> (new undo commit)</td></tr>
+</table>
+<blockquote>The hard line: <strong>before pushing, fix freely; after pushing, prefer <code>revert</code></strong> — don't rewrite shared history.</blockquote>
+
+<h2><code>add .</code> vs naming files</h2>
+<p><code>git add Dog.java</code> stages one file → focused commits. <code>git add .</code> stages everything changed → convenient but can sweep in surprises. <code>git status</code> first, always.</p>
+
+<p class="source">
+  <a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">Pro Git — Branching</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0006-git-branching-github.html">← Lesson 06</a></span>
+  <span><a href="git-basics.html">Git basics reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

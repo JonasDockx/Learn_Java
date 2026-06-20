@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 6 — Branching &amp; GitHub</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 06 · Version Control</p>
+<h1>Branching &amp; GitHub</h1>
+<p><em>Work on a feature without touching the main line — then push it somewhere the team (and your future job) can see it.</em></p>
+
+<div class="callout callout-mission">
+  <strong>This is the team workflow.</strong> On the job you won't commit straight to the
+  main branch. You'll branch off, build a feature, push it to GitHub, and open a
+  <em>pull request</em> for review. This lesson walks that exact loop on your own repo.
+</div>
+
+<h2>What a branch is</h2>
+<p>
+A <strong>branch</strong> is just a movable pointer to a commit — a parallel line of work.
+You make a branch, commit on it freely, and your <code>main</code> branch stays untouched
+until you decide to <strong>merge</strong> the work back in. It's how a team works on ten
+things at once without stepping on each other.
+</p>
+
+<pre><code>  main:     A───B───C
+                     \
+  feature:            D───E      ← your work, isolated
+                     /
+  (merge E back into main when it's ready)</code></pre>
+
+<h2>The branching loop</h2>
+<pre><code>git switch -c add-cat-class   # create a branch AND move onto it
+git status                    # confirms: "On branch add-cat-class"
+
+# ...edit files, then the normal add/commit loop...
+git add Cat.java
+git commit -m "Add Cat class"
+
+git switch main               # hop back to the main line
+git merge add-cat-class       # fold the feature work into main
+git branch -d add-cat-class   # delete the branch once merged</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  <code>git switch</code> changes which branch you're "standing on" — your files in the
+  folder actually change to match that branch. Commits you make land on the current branch
+  only. <code>main</code> doesn't see them until you <code>merge</code>. (You may see older
+  guides use <code>git checkout</code>; <code>git switch</code> is the modern, clearer verb.)
+</div>
+
+<h2>GitHub: a remote home for your repo</h2>
+<p>
+So far everything lives only on this laptop. <strong>GitHub</strong> hosts a copy — a
+<strong>remote</strong> — so your work is backed up, shareable, and reviewable. The vocabulary:
+</p>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem; margin:1rem 0;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Term</th><th>Meaning</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>remote</code></td><td>a linked copy of your repo elsewhere (e.g. on GitHub). The default is named <code>origin</code>.</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>push</code></td><td>send your local commits up to the remote</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>pull</code></td><td>bring the remote's new commits down to you</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>clone</code></td><td>copy a remote repo down for the first time</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">pull request (PR)</td><td>a GitHub request to merge your branch — where code review happens</td></tr>
+</table>
+
+<p>Connecting your existing repo to a fresh empty GitHub repo (one-time):</p>
+<pre><code>git remote add origin https://github.com/&lt;you&gt;/Learn_Java.git
+git push -u origin main        # push main; -u remembers the link for next time</code></pre>
+<p>After that, day to day it's just <code>git push</code> and <code>git pull</code>.</p>
+
+<div class="callout callout-key">
+  <h3>The team loop you'll actually live in</h3>
+  <strong>branch → commit → push branch → open a Pull Request → review → merge.</strong>
+  The PR is the heart of it: teammates comment on your code before it joins <code>main</code>.
+  "Can you open a PR?" is junior-day-one vocabulary — now you have it.
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">What does <code>git switch -c add-cat-class</code> do?</div>
+  <button class="opt" data-explain="merge folds branches together; this doesn't merge.">Merges the branch into main</button>
+  <button class="opt" data-explain="Right — -c creates the branch and moves you onto it.">Creates the branch and switches to it</button>
+  <button class="opt" data-explain="push sends commits to a remote; switch is local.">Pushes the branch to GitHub</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Commits you make on a feature branch appear on <code>main</code>…</div>
+  <button class="opt" data-explain="They don't appear automatically; branches are isolated.">Immediately and automatically</button>
+  <button class="opt" data-explain="Pushing sends to a remote — it doesn't update main.">As soon as you push them</button>
+  <button class="opt" data-explain="Right — main only sees them after you merge.">Only after you merge the branch</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">What is a pull request?</div>
+  <button class="opt" data-explain="Yes — a request to merge a branch, where review happens.">A request to merge a branch, with review</button>
+  <button class="opt" data-explain="That's git pull, a different thing entirely.">A command to download commits</button>
+  <button class="opt" data-explain="Creating a branch is git switch -c, not a PR.">Another name for creating a branch</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now — part A (local, do it today)</h2>
+<ol>
+  <li><code>git switch -c add-cat-class</code>. Run <code>git status</code> to see the branch name.</li>
+  <li>Create a small <code>Cat.java</code> (copy your <code>Dog.java</code> shape). Compile, <code>git add</code>, <code>git commit -m "Add Cat class"</code>.</li>
+  <li><code>git switch main</code> — open the folder and notice <code>Cat.java</code> is <em>gone</em> (it lives on the other branch).</li>
+  <li><code>git merge add-cat-class</code> — now <code>Cat.java</code> is back on <code>main</code>. <code>git log --oneline</code> to see it.</li>
+  <li><code>git branch -d add-cat-class</code> to clean up.</li>
+</ol>
+
+<h2>Do this now — part B (GitHub, when you're ready)</h2>
+<p><em>Needs a free GitHub account and one-time authentication — a slightly bigger setup, so do it when you have a quiet 20 minutes. Ask me and I'll walk you through it.</em></p>
+<ol>
+  <li>Create a (free) account at <a href="https://github.com">github.com</a>.</li>
+  <li>Make a new <strong>empty</strong> repo named <code>Learn_Java</code> (no README — yours isn't empty).</li>
+  <li>Run the two <code>git remote add</code> / <code>git push -u origin main</code> commands above.</li>
+  <li>Refresh the GitHub page — your code is now online.</li>
+</ol>
+
+<p class="source">
+  <a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">Pro Git — Branches in a Nutshell</a>.
+  The canonical explanation of branching, with the same pointer diagrams. Read after this lesson.
+</p>
+
+<div class="callout callout-ask">
+  <strong>Questions?</strong> What happens if two branches change the same line (a
+  <em>merge conflict</em>)? How does GitHub authentication work — and can you use that
+  <code>id_rsa</code> SSH key you already have? Ask me. Authentication is the one fiddly bit,
+  and I'm happy to set it up with you when you tackle part B.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0005-git-basics.html">← Lesson 05</a></span>
+  <span><a href="../reference/git-branching.html">Reference: branching &amp; remotes →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
