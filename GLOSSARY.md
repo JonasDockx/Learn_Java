@@ -56,3 +56,15 @@ _Avoid_: save, checkpoint
 **Staging area**:
 The set of changes selected (via `git add`) to go into the next commit. Sits between your live files and the repository.
 _Avoid_: index, cache
+
+**Branch**:
+A movable pointer to a commit — an isolated line of work. Commits land on the current branch only; `main` sees them after a `merge`.
+_Avoid_: fork, copy
+
+**Remote**:
+A linked copy of the repository hosted elsewhere (e.g. on GitHub), named `origin` by default. You `push` commits to it and `pull` commits from it.
+_Avoid_: server, the cloud
+
+**Pull request (PR)**:
+A request on GitHub to merge one branch into another, providing the place where teammates review code before it joins `main`.
+_Avoid_: merge request (that's GitLab's name), code review

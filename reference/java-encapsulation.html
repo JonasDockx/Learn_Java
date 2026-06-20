@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Encapsulation &amp; Access</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Encapsulation &amp; Access</h1>
+<p><em>Private data, controlled access. Print this.</em></p>
+
+<h2>The pattern</h2>
+<pre><code>public class Dog {
+    private int age;                 // 1. hide the field
+
+    public int getAge() {            // 2. controlled read
+        return age;
+    }
+
+    public void setAge(int age) {    // 3. controlled write + validation
+        if (age &lt; 0) throw new IllegalArgumentException("age &lt; 0");
+        this.age = age;
+    }
+}</code></pre>
+
+<h2>Access modifiers</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Modifier</th><th>Visible from</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>private</code></td><td>the same class only</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">(none)</td><td>the same package</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>protected</code></td><td>same package + subclasses</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>public</code></td><td>everywhere</td></tr>
+</table>
+<p>Default for a junior: fields <code>private</code>, methods <code>public</code> unless you have a reason otherwise.</p>
+
+<h2>Naming conventions</h2>
+<ul>
+  <li>Getter: <code>getX()</code> — or <code>isX()</code> for a <code>boolean</code>.</li>
+  <li>Setter: <code>setX(value)</code>, returns <code>void</code>, validates before assigning.</li>
+  <li>Construct through the setter so validation runs at creation too.</li>
+</ul>
+
+<h2>Python → Java</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Python</th><th>Java</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>self._age</code> (convention)</td><td><code>private int age;</code> (enforced)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>@property</code></td><td><code>getAge()</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>@age.setter</code></td><td><code>setAge(int)</code></td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>Why bother</h3>
+  Encapsulation = data + the rules that protect it, bundled, with a guarded door.
+  <code>private</code> is compiler-enforced, so invalid state becomes <em>impossible</em>,
+  not just discouraged.
+</div>
+
+<p class="source">
+  <a href="https://dev.java/learn/classes-objects/access-control/">dev.java — Controlling Access</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0007-encapsulation.html">← Lesson 07</a></span>
+  <span><a href="java-classes.html">Classes reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

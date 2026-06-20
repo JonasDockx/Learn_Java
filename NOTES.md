@@ -20,5 +20,9 @@ Working notes and preferences for teaching Jonas.
   return to the OO thread (encapsulation) afterward.
 - Pending OO thread: Lesson 5 was going to be encapsulation (`private` + getters);
   Git bumps in front of it.
+- **GitHub is set up and working** over HTTPS — repo at github.com/JonasDockx/Learn_Java,
+  successfully pushed. Auth handled by Git Credential Manager (no action needed).
+- The `id_rsa` keys in `Documents/Programmeren/` are for a **Linux server, unrelated
+  to GitHub** — do NOT propose reusing them for GitHub auth.
 
 # Added a comment to see what changed in Git
