@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 9 — Abstraction: Abstract Classes &amp; Interfaces</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 09 · Object-Oriented Programming</p>
+<h1>Abstraction: Abstract Classes &amp; Interfaces</h1>
+<p><em>Define <strong>what</strong> something must do without saying <strong>how</strong> — the contracts that hold large Java systems together.</em></p>
+
+<div class="callout callout-mission">
+  <strong>Why this matters for the job.</strong> Spring, and most Java libraries, are built on
+  <em>interfaces</em>: you code against a contract, the framework supplies the implementation.
+  Understanding abstract classes and interfaces is what lets you read a real codebase and think
+  "ah, this is the contract, that's the implementation." This is the abstraction pillar on your syllabus.
+</div>
+
+<h2>Abstract classes — a base that can't stand alone</h2>
+<p>From your own question: there's no such thing as a <em>generic</em> Animal. Mark it <code>abstract</code> so nobody can create one, and declare <code>speak()</code> with <strong>no body</strong> so every subclass must supply it:</p>
+
+<pre><code>public abstract class Animal {        // can't be instantiated
+    private String name;
+    public Animal(String name) { this.name = name; }
+    public String getName() { return name; }
+
+    public abstract String speak();   // no body — subclasses MUST implement
+}</code></pre>
+
+<pre><code>Animal a = new Animal("Thing");   // ✗ COMPILE ERROR — Animal is abstract
+Animal d = new Dog("Rex");        // ✔ a concrete subclass is fine</code></pre>
+
+<p>
+An abstract class can still have <em>state</em> (the <code>name</code> field) and <em>finished</em>
+methods (<code>getName()</code>) — it's a partial blueprint: "here's what all animals share, plus a
+list of what each must fill in."
+</p>
+
+<h2>Interfaces — a pure contract</h2>
+<p>
+An <strong>interface</strong> goes further: it's <em>only</em> a list of methods a class promises to
+provide — a capability, with no state. A class <code>implements</code> it:
+</p>
+
+<pre><code>public interface Trainable {        // a capability, not a thing
+    String learnTrick(String trick);
+}
+
+public class Dog extends Animal implements Trainable {
+    public Dog(String name) { super(name); }
+
+    @Override public String speak() { return getName() + " says woof"; }
+
+    @Override
+    public String learnTrick(String trick) {
+        return getName() + " learned to " + trick;
+    }
+}</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight — the one-vs-many rule</h3>
+  A class can <code>extends</code> <strong>exactly one</strong> class, but can
+  <code>implements</code> <strong>many</strong> interfaces. So interfaces are how unrelated
+  classes share a capability: a <code>Dog</code> and a <code>Robot</code> could both be
+  <code>Trainable</code> without sharing any parent. Inheritance shares <em>identity</em>
+  (is-a); interfaces share <em>ability</em> (can-do).
+</div>
+
+<h2>Which one? abstract class vs interface</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;"></th><th>Abstract class</th><th>Interface</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Models</td><td>is-a (shared identity)</td><td>can-do (shared ability)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Can hold fields/state</td><td>yes</td><td>no (constants only)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">How many per class</td><td><code>extends</code> one</td><td><code>implements</code> many</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Use when</td><td>subtypes share code + state</td><td>unrelated types share a capability</td></tr>
+</table>
+<p>Rule of thumb for now: a shared <em>base with real shared code</em> → abstract class; a <em>capability many types can sign up to</em> → interface. (Python parallels: <code>abc.ABC</code> + <code>@abstractmethod</code> for both; Java just separates them into two keywords.)</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="2">
+  <div class="q">What happens with <code>new Animal("Thing")</code> if <code>Animal</code> is abstract?</div>
+  <button class="opt" data-explain="It doesn't create a default — it's not allowed at all.">Creates an animal with no sound</button>
+  <button class="opt" data-explain="It fails earlier than runtime — at compile time.">Throws an error when it runs</button>
+  <button class="opt" data-explain="Abstract classes can't be instantiated; won't compile.">Fails to compile — Animal is abstract</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">How many interfaces can one class implement?</div>
+  <button class="opt" data-explain="Right — many interfaces, but only one parent class.">Many — but only one parent class</button>
+  <button class="opt" data-explain="That's the limit for extends, not implements.">Exactly one, like extends</button>
+  <button class="opt" data-explain="Interfaces are very much allowed; there's no ban.">None — interfaces can't be used</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">An interface is best for modelling…</div>
+  <button class="opt" data-explain="Shared identity + state is the abstract-class case.">shared state between subclasses</button>
+  <button class="opt" data-explain="Right — a can-do capability across unrelated types.">a capability unrelated classes can share</button>
+  <button class="opt" data-explain="Privacy is encapsulation, a different concern.">hiding a class's private fields</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now</h2>
+<ol>
+  <li>Make your <code>Animal</code> <code>abstract</code> and turn <code>speak()</code> into an abstract method (delete its body and the default). Remove any plain <code>new Animal(...)</code> from your demo — try one and read the compile error first.</li>
+  <li>Confirm <code>Dog</code> and <code>Cat</code> still compile — they already provide <code>speak()</code>, which is now <em>required</em>.</li>
+  <li>Create an interface <code>Trainable</code> with <code>String learnTrick(String trick);</code>. Make <code>Dog implements Trainable</code> and implement the method.</li>
+  <li>In your demo, call <code>d.learnTrick("roll over")</code>. Then make <code>Cat</code> <code>Trainable</code> too — or deliberately <em>don't</em>, and notice the compiler only complains if you declare <code>implements Trainable</code> without the method. Commit on a branch and merge.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/interfaces/">dev.java — Interfaces</a> and
+  <a href="https://dev.java/learn/inheritance/abstract-classes/">Abstract Classes</a>.
+  The official guides. Read after this lesson.
+</p>
+
+<div class="callout callout-ask">
+  <strong>Questions?</strong> What's a <code>default</code> method on an interface? Why do
+  collections like <code>List</code> happen to be interfaces? When does an interface beat an
+  abstract class in real design? Ask me — and Lesson 10 starts the <strong>Advanced</strong>
+  track on your syllabus with <strong>exception handling</strong>, which you've already glimpsed
+  every time your <code>setAge</code> threw.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0008-inheritance-polymorphism.html">← Lesson 08</a></span>
+  <span><a href="../reference/java-abstraction.html">Reference: abstraction →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

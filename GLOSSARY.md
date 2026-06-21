@@ -43,6 +43,28 @@ _Avoid_: basic type, value type
 A keyword that lets the compiler infer a variable's type from its initial value. The type is still fixed and static — `var` only saves you writing it.
 _Avoid_: dynamic type, any
 
+## Object-oriented programming
+
+**Encapsulation**:
+Bundling data with the methods that guard it, and hiding the data behind `private` so it can only change through controlled, validating access. Enforced by the compiler.
+_Avoid_: data hiding, information hiding
+
+**Inheritance**:
+A class taking on the fields and methods of a parent via `extends`, modelling an "is-a" relationship (a Dog is-a Animal).
+_Avoid_: subclassing, deriving
+
+**Polymorphism**:
+Calling a method through a parent-typed reference and getting the actual object's version at runtime — so one piece of code works across every subtype.
+_Avoid_: dynamic dispatch, late binding
+
+**Override**:
+A subclass replacing an inherited method with the same signature (marked `@Override`). Resolved at runtime by the object's real type.
+_Avoid_: redefine
+
+**Overload**:
+Multiple methods in one class sharing a name but taking different parameters. Resolved at compile time by the arguments. (Not the same as override.)
+_Avoid_: overriding
+
 ## Git
 
 **Repository**:

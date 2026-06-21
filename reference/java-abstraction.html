@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Abstraction</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Abstraction</h1>
+<p><em>Abstract classes, interfaces, and when to use which. Print this.</em></p>
+
+<h2>Abstract class</h2>
+<pre><code>public abstract class Animal {
+    private String name;
+    public Animal(String name) { this.name = name; }
+    public String getName() { return name; }   // finished method
+    public abstract String speak();             // no body — must override
+}</code></pre>
+<ul>
+  <li>Cannot be instantiated (<code>new Animal()</code> won't compile).</li>
+  <li>May mix finished methods + state with abstract (unfinished) methods.</li>
+  <li>Subclasses must implement every abstract method.</li>
+</ul>
+
+<h2>Interface</h2>
+<pre><code>public interface Trainable {
+    String learnTrick(String trick);   // implicitly public abstract
+}
+
+public class Dog extends Animal implements Trainable {
+    @Override public String speak() { return getName() + " woof"; }
+    @Override public String learnTrick(String t) { return getName() + " did " + t; }
+}</code></pre>
+
+<h2>The decision</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;"></th><th>Abstract class</th><th>Interface</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Models</td><td>is-a (identity)</td><td>can-do (ability)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">State/fields</td><td>yes</td><td>no (constants only)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Per class</td><td><code>extends</code> 1</td><td><code>implements</code> many</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Pick when</td><td>shared code + state</td><td>unrelated types, shared capability</td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>One-vs-many</h3>
+  <code>extends</code> one class · <code>implements</code> many interfaces.
+  Inheritance shares <strong>identity</strong>; interfaces share <strong>ability</strong>.
+</div>
+
+<h2>is-a vs has-a (composition)</h2>
+<pre><code>class Dog extends Animal { }     // is-a   → inheritance
+class Car { private Engine engine; }   // has-a → composition (often preferred)</code></pre>
+<p>Favour composition unless there's a real is-a with behaviour to share polymorphically.</p>
+
+<p class="source">
+  <a href="https://dev.java/learn/interfaces/">dev.java — Interfaces</a> ·
+  <a href="https://dev.java/learn/inheritance/abstract-classes/">Abstract Classes</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0009-abstraction-interfaces.html">← Lesson 09</a></span>
+  <span><a href="java-inheritance.html">Inheritance reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>
