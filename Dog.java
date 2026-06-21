@@ -1,30 +1,24 @@
 public class Dog {
-    String name;
-    int age;
+    private String name;        // private = unreachable from outside the class
+    private int age;
 
-    Dog(String name, int age) {
+    public Dog(String name, int age) {
         this.name = name;
-        this.age = age;
+        setAge(age);            // reuse the validation even at construction
     }
 
-    String bark() {
-        return name + " says woof";
+    public String getName() {   // getter: controlled read access
+        return name;
     }
 
-    String describe() {
-        return name + ", age " + age;
+    public int getAge() {
+        return age;
     }
 
-    public static void main(String[] args) {
-        Dog a = new Dog("Rex", 3);
-        Dog b = a;      // same object
-        b.age = 4;
-        System.out.println(a.name + " is " + a.age);    // age is 4 - why?
-        System.out.println(a.bark());
-        System.out.println(a.describe());
-
-        Dog c = new Dog("Rex", 4);  // Different object, same content
-        System.out.println("a == b? " + (a == b));  // true (same arrow)
-        System.out.println("a == c? " + (a == c));  // false (different objects) 
+    public void setAge(int age) {   // setter: controlled write access
+        if (age < 0) {
+            throw new IllegalArgumentException("age cannot be negative");
+        }
+        this.age = age;             // only reached if the value is valid
     }
 }

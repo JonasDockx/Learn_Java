@@ -105,11 +105,18 @@ access), different mechanism.
 </div>
 
 <h2>Do this now</h2>
+<div class="callout callout-key">
+  <h3>Important: <code>private</code> is per-class, not per-object</h3>
+  <code>private</code> means "reachable anywhere inside the <em>same class</em>." So a
+  <code>main</code> method placed <em>inside</em> <code>Dog</code> can still touch
+  <code>d.age</code> freely — no error. To see the wall, the access must come from a
+  <strong>different class</strong>. That's why we put the demo in its own file below.
+</div>
 <ol>
-  <li>Rewrite your <code>Dog.java</code>: make <code>name</code> and <code>age</code> <code>private</code>, add <code>getName()</code>, <code>getAge()</code>, and a validating <code>setAge()</code>.</li>
-  <li>In <code>main</code>, try <code>d.age = -100;</code> and compile — read the "has private access" error. Delete that line.</li>
-  <li>Now try <code>d.setAge(-100);</code> and run — watch your <code>IllegalArgumentException</code> fire with your message. <em>You</em> defined that rule.</li>
-  <li>Use <code>d.getAge()</code> to print the age the proper way. Commit it on a branch and merge (practise Lesson 6!).</li>
+  <li>Keep <code>Dog.java</code> as the clean blueprint: <code>private</code> <code>name</code> and <code>age</code>, plus <code>getName()</code>, <code>getAge()</code>, and a validating <code>setAge()</code>. No <code>main</code> inside it.</li>
+  <li>Create a <strong>separate</strong> <code>DogDemo.java</code> with its own <code>main</code>. Inside it: <code>Dog d = new Dog("Rex", 3);</code> then <code>d.age = -100;</code>. Compile <code>DogDemo.java</code> — read the <em>"age has private access in Dog"</em> error. <strong>This</strong> is the wall.</li>
+  <li>Delete that line; replace with <code>d.setAge(-100);</code> and run — watch your <code>IllegalArgumentException</code> fire. It compiled (public method) but your rule rejected it at runtime.</li>
+  <li>Use <code>d.getAge()</code> to print the age the proper way. Commit on a branch and merge (practise Lesson 6!).</li>
 </ol>
 
 <p class="source">
