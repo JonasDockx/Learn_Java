@@ -1,10 +1,10 @@
-public class Dog extends Animal { // Dog IS-A Animal
-    public Dog(String name) {
+public class Cow extends Animal { // Cow IS-A Animal
+    public Cow(String name) {
         super(name);            // call Animal's constructor
     }
 
     @Override
     public String speak() {     // replace the inherited behaviour
-        return getName() + " says woof";
+        return getName() + " says moo";
     }
 }

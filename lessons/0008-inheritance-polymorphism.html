@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 8 — Inheritance &amp; Polymorphism</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 08 · Object-Oriented Programming</p>
+<h1>Inheritance &amp; Polymorphism</h1>
+<p><em>Let <code>Dog</code> and <code>Cat</code> share what they have in common — then treat them the same while they behave differently.</em></p>
+
+<div class="callout callout-mission">
+  <strong>Two pillars at once.</strong> <code>Dog</code> and <code>Cat</code> both have a
+  name and an age and can make a sound. Copy-pasting that into every animal is exactly the
+  duplication OO exists to kill. <strong>Inheritance</strong> shares it; <strong>polymorphism</strong>
+  lets one piece of code work with all of them. This pairing is the backbone of how Java
+  frameworks (Spring included) are built.
+</div>
+
+<h2>Inheritance — a shared parent</h2>
+<p>Pull the common parts into an <code>Animal</code> parent; <code>Dog</code> and <code>Cat</code> <strong>extend</strong> it and add their own twist.</p>
+
+<pre><code>public class Animal {
+    private String name;
+
+    public Animal(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String speak() {       // a default; subclasses will override
+        return name + " makes a sound";
+    }
+}</code></pre>
+
+<pre><code>public class Dog extends Animal {     // Dog IS-A Animal
+    public Dog(String name) {
+        super(name);                  // call Animal's constructor
+    }
+
+    @Override
+    public String speak() {           // replace the inherited behaviour
+        return getName() + " says woof";
+    }
+}</code></pre>
+
+<pre><code>public class Cat extends Animal {
+    public Cat(String name) {
+        super(name);
+    }
+
+    @Override
+    public String speak() {
+        return getName() + " says meow";
+    }
+}</code></pre>
+
+<ul>
+  <li><code>extends Animal</code> — Dog inherits Animal's fields and methods (the <strong>"is-a"</strong> test: a Dog <em>is an</em> Animal).</li>
+  <li><code>super(name)</code> — calls the parent constructor to set up the inherited part. (Python: <code>super().__init__(name)</code>.)</li>
+  <li><code>@Override</code> — tells the compiler "I'm deliberately replacing the parent's <code>speak()</code>." If you typo the name, the compiler catches it.</li>
+  <li><code>getName()</code> — Dog can't touch <code>private name</code> directly (per-class privacy, Lesson 7!), so it uses the inherited public getter.</li>
+</ul>
+
+<h2>Polymorphism — one type, many forms</h2>
+<p>Because a Dog <em>is an</em> Animal, an <code>Animal</code> variable can hold one. And when you call <code>speak()</code>, Java runs the <em>actual object's</em> version — decided at runtime:</p>
+
+<pre><code>Animal a = new Dog("Rex");
+Animal b = new Cat("Mittens");
+
+System.out.println(a.speak());   // Rex says woof   ← Dog's version
+System.out.println(b.speak());   // Mittens says meow ← Cat's version
+
+// The payoff: one loop, any animal
+Animal[] zoo = { new Dog("Rex"), new Cat("Mittens"), new Animal("Thing") };
+for (Animal animal : zoo) {
+    System.out.println(animal.speak());   // each speaks for itself
+}</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  The variable's <em>declared</em> type is <code>Animal</code>, but the <em>object's</em>
+  real type decides which <code>speak()</code> runs. This is <strong>polymorphism</strong>:
+  write code against the general type (<code>Animal</code>), and every specific type plugs in
+  and behaves correctly. Add a <code>Hamster</code> tomorrow and that loop needs <em>zero</em>
+  changes. (This is Python's duck typing — but Java reaches it through a shared supertype the
+  compiler checks.)
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">What does <code>super(name)</code> do in Dog's constructor?</div>
+  <button class="opt" data-explain="@Override marks a replaced method; that's separate.">Overrides the speak method</button>
+  <button class="opt" data-explain="Right — it runs Animal's constructor to set inherited state.">Calls the parent's constructor</button>
+  <button class="opt" data-explain="new creates objects; super calls the parent.">Creates a new Animal object</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q"><code>Animal a = new Dog("Rex"); a.speak();</code> prints what?</div>
+  <button class="opt" data-explain="The declared type is Animal, but the object is a Dog.">Rex makes a sound</button>
+  <button class="opt" data-explain="It compiles fine — Dog is-a Animal.">A compile error</button>
+  <button class="opt" data-explain="Right — the real object (Dog) decides at runtime.">Rex says woof</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">Why add <code>@Override</code> above a method?</div>
+  <button class="opt" data-explain="Yes — the compiler verifies you really are overriding.">So the compiler checks you matched the parent</button>
+  <button class="opt" data-explain="It doesn't affect speed at all.">To make the method run faster</button>
+  <button class="opt" data-explain="It marks overriding, not privacy.">To make the method private</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now</h2>
+<ol>
+  <li>Create <code>Animal.java</code> (the parent above). Refactor your <code>Dog.java</code> to <code>extends Animal</code> with <code>super(name)</code> and an <code>@Override</code>d <code>speak()</code>. Do the same for <code>Cat.java</code>.</li>
+  <li>In <code>DogDemo.java</code>, build the <code>Animal[] zoo</code> array and loop over it calling <code>speak()</code>. Confirm each animal speaks its own way.</li>
+  <li>Break <code>@Override</code> on purpose: rename Dog's method to <code>speakk()</code> but keep <code>@Override</code>. Compile — read how the compiler protects you.</li>
+  <li>Add a third animal (e.g. <code>Cow</code>) and add it to the <code>zoo</code> array. Notice the loop needs no changes — that's polymorphism earning its keep. Commit on a branch and merge.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/inheritance/">dev.java — Inheritance</a>.
+  The official guide to <code>extends</code>, <code>super</code>, and overriding. Read after this lesson.
+</p>
+
+<div class="callout callout-ask">
+  <strong>Questions?</strong> What if <code>Animal</code> should never be instantiated on its
+  own (<code>abstract</code>)? When should you prefer <strong>composition</strong> over
+  inheritance — your syllabus lists both? What's the difference between overriding and
+  overloading? Ask me — these are exactly the design judgments Lesson 9 (<strong>abstraction:
+  abstract classes &amp; interfaces</strong>) builds on.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0007-encapsulation.html">← Lesson 07</a></span>
+  <span><a href="../reference/java-inheritance.html">Reference: inheritance →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

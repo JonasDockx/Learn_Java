@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Inheritance &amp; Polymorphism</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Inheritance &amp; Polymorphism</h1>
+<p><em>Sharing behaviour and the one-type-many-forms payoff. Print this.</em></p>
+
+<h2>The shape</h2>
+<pre><code>public class Animal {
+    private String name;
+    public Animal(String name) { this.name = name; }
+    public String getName() { return name; }
+    public String speak() { return name + " makes a sound"; }
+}
+
+public class Dog extends Animal {
+    public Dog(String name) { super(name); }   // call parent constructor
+    @Override
+    public String speak() { return getName() + " says woof"; }
+}</code></pre>
+
+<h2>Keywords</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Keyword</th><th>Means</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>extends Animal</code></td><td>this class is-a Animal; inherits its members</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>super(...)</code></td><td>call the parent constructor (first line of yours)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>super.method()</code></td><td>call the parent's version of a method</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>@Override</code></td><td>"I'm replacing a parent method" — compiler-checked</td></tr>
+</table>
+
+<h2>Polymorphism</h2>
+<pre><code>Animal a = new Dog("Rex");   // declared Animal, really a Dog
+a.speak();                   // "Rex says woof" — object's type wins
+
+Animal[] zoo = { new Dog("Rex"), new Cat("Mittens") };
+for (Animal x : zoo) System.out.println(x.speak());  // each its own way</code></pre>
+<p><strong>Declared type</strong> = what the compiler lets you call. <strong>Object type</strong> = whose method actually runs (decided at runtime).</p>
+
+<div class="callout callout-key">
+  <h3>Python → Java</h3>
+  <code>class Dog(Animal):</code> → <code>class Dog extends Animal</code><br>
+  <code>super().__init__(name)</code> → <code>super(name)</code><br>
+  duck typing → polymorphism via a shared supertype the compiler checks
+</div>
+
+<h2>Override vs overload (don't mix up)</h2>
+<ul>
+  <li><strong>Override</strong>: same method signature, in a subclass — replaces behaviour.</li>
+  <li><strong>Overload</strong>: same method name, <em>different parameters</em>, same class — e.g. <code>print(int)</code> and <code>print(String)</code>.</li>
+</ul>
+
+<p class="source">
+  <a href="https://dev.java/learn/inheritance/">dev.java — Inheritance</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0008-inheritance-polymorphism.html">← Lesson 08</a></span>
+  <span><a href="java-encapsulation.html">Encapsulation reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>
