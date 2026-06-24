@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 11 — Abstract Classes</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 11 · Object-Oriented Programming</p>
+<h1>Abstract Classes</h1>
+<p><em>One idea: a class you can extend but cannot instantiate.</em></p>
+
+<div class="callout callout-mission">
+  This is the abstraction topic from before, narrowed to a single concept and a single file.
+  No interfaces here — those come later.
+</div>
+
+<h2>The idea</h2>
+<p>An <strong>abstract class</strong> exists only to be a parent. Two rules:</p>
+<ol>
+  <li>You <strong>cannot</strong> create one with <code>new</code> — only its subclasses.</li>
+  <li>An <strong>abstract method</strong> has no body. Any subclass <em>must</em> provide one, or it won't compile.</li>
+</ol>
+<p>Use it when a base type is real as a category but meaningless on its own. "A vehicle" makes no sense as a concrete thing — only a <em>car</em>, a <em>bike</em>. So <code>Vehicle</code> is abstract; <code>Car</code> is concrete.</p>
+
+<h2>One file, three classes</h2>
+<p>A <code>.java</code> file may hold one <code>public</code> class plus other non-public classes. Put this all in <code>AbstractIntro.java</code>:</p>
+
+<pre><code>public class AbstractIntro {
+    public static void main(String[] args) {
+        // Vehicle v = new Vehicle();   // ← uncomment later to see the error
+        Car car = new Car();
+        System.out.println(car.sound());   // vroom
+    }
+}
+
+abstract class Vehicle {        // cannot be instantiated
+    abstract String sound();    // no body — subclasses must implement
+}
+
+class Car extends Vehicle {     // concrete: provides the body
+    @Override
+    String sound() {
+        return "vroom";
+    }
+}</code></pre>
+
+<p>Compile and run:</p>
+<pre><code>javac AbstractIntro.java
+java AbstractIntro</code></pre>
+<p>It prints <code>vroom</code>. <code>Car</code> works because it supplies <code>sound()</code>.</p>
+
+<div class="callout callout-key">
+  <h3>See rule 1 fail on purpose</h3>
+  Uncomment the <code>Vehicle v = new Vehicle();</code> line and recompile. You get:
+  <pre><code>error: Vehicle is abstract; cannot be instantiated</code></pre>
+  That is the entire point of <code>abstract</code>: it makes "a generic Vehicle" impossible to
+  build. (This error appears even from inside the same file — unlike <code>private</code>, which
+  only blocks <em>other</em> classes.)
+</div>
+
+<h2>See rule 2 fail on purpose</h2>
+<p>Temporarily delete the whole <code>sound()</code> method from <code>Car</code> and recompile. You get:</p>
+<pre><code>error: Car is not abstract and does not override abstract method sound() in Vehicle</code></pre>
+<p>Translation: "<code>Car</code> claims to be a real, buildable vehicle, but it never said what sound it makes." A concrete subclass must fill in every abstract method. Put <code>sound()</code> back afterward.</p>
+
+<div class="callout callout-key">
+  <h3>If that error does <em>not</em> appear: stale <code>.class</code> files</h3>
+  Compiled <code>.class</code> files persist in the folder, and <code>javac</code> resolves a
+  class name against any <code>.class</code> it finds — not just your current source. A leftover
+  <code>Car.class</code> from an earlier build can silently satisfy <code>new Car()</code> even
+  after you change the source, hiding the error. Fix: a <strong>clean build</strong> — delete the
+  <code>.class</code> files and recompile:
+  <pre><code>del *.class      &amp;&amp; javac AbstractIntro.java    # Windows
+rm *.class       ;  javac AbstractIntro.java     # Git Bash</code></pre>
+  Real projects automate this with <code>mvn clean</code> / <code>gradle clean</code>.
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">What does marking a class <code>abstract</code> prevent?</div>
+  <button class="opt" data-explain="Subclasses are exactly what abstract classes are for.">Creating subclasses of it</button>
+  <button class="opt" data-explain="Right — you can extend it but never instantiate it directly.">Creating it directly with new</button>
+  <button class="opt" data-explain="Methods can still have bodies in an abstract class.">Writing any method bodies</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">An <code>abstract</code> method (no body) means subclasses…</div>
+  <button class="opt" data-explain="They aren't forced to ignore it; the opposite.">may ignore it safely</button>
+  <button class="opt" data-explain="It is inherited, but not as a finished method.">inherit a working version</button>
+  <button class="opt" data-explain="Right — a concrete subclass must implement it.">must implement it to compile</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>Create <code>AbstractIntro.java</code> with the code above. Compile and run — confirm it prints <code>vroom</code>.</li>
+  <li>Uncomment <code>new Vehicle()</code>, recompile, read the "cannot be instantiated" error, then comment it back.</li>
+  <li>Delete <code>Car</code>'s <code>sound()</code> method, recompile, read the "must override" error, then put it back.</li>
+  <li>Add a second subclass <code>Bike</code> that returns <code>"ring"</code>, create one in <code>main</code>, and print its sound.</li>
+</ol>
+<p>That is the whole lesson: cannot instantiate the abstract parent; must implement its abstract methods.</p>
+
+<p class="source">
+  <a href="https://dev.java/learn/inheritance/abstract-classes/">dev.java — Abstract Classes</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything that errored differently than described, or any word above. The next lesson
+  is interfaces — the other half of the parked lesson — kept equally small.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0010-anatomy-of-a-java-program.html">← Lesson 10</a></span>
+  <span><a href="../reference/java-abstraction.html">Reference: abstraction →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 12 — Interfaces</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 12 · Object-Oriented Programming</p>
+<h1>Interfaces</h1>
+<p><em>One idea: a contract that a class promises to fulfil.</em></p>
+
+<div class="callout callout-mission">
+  The second half of abstraction, on its own. You just saw abstract classes; an interface is the
+  next step along the same line. One concept, one file, fresh names.
+</div>
+
+<h2>The idea</h2>
+<p>
+An <strong>interface</strong> is a list of method signatures with <strong>no bodies and no
+state</strong> — a pure contract. A class <code>implements</code> the interface and must provide
+every method, or it won't compile.
+</p>
+<p>Compared to the abstract class from Lesson 11:</p>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Abstract class</th><th>Interface</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">can have fields + finished methods</td><td>no fields, no bodies — just the contract</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">a class <code>extends</code> one</td><td>a class <code>implements</code> many</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">keyword <code>extends</code></td><td>keyword <code>implements</code></td></tr>
+</table>
+
+<h2>One file, two pieces</h2>
+<p>Put this in <code>InterfaceIntro.java</code>:</p>
+<pre><code>public class InterfaceIntro {
+    public static void main(String[] args) {
+        Switchable lamp = new Lamp();      // a Lamp IS-A Switchable
+        System.out.println(lamp.turnOn());
+    }
+}
+
+interface Switchable {          // the contract
+    String turnOn();            // no body — implementers must provide it
+}
+
+class Lamp implements Switchable {   // signs the contract
+    @Override
+    public String turnOn() {         // must be public (interface methods are public)
+        return "Lamp is on";
+    }
+}</code></pre>
+
+<p>Compile and run:</p>
+<pre><code>javac InterfaceIntro.java
+java InterfaceIntro</code></pre>
+<p>Prints <code>Lamp is on</code>. <code>Lamp</code> compiles because it fulfils the <code>Switchable</code> contract.</p>
+
+<div class="callout callout-key">
+  <h3>Two things to notice</h3>
+  <ol>
+    <li>The implementing method must be <code>public</code>. Interface methods are always public, and a class can't make them less visible.</li>
+    <li>The variable's type can be the <em>interface</em>: <code>Switchable lamp = new Lamp();</code>. You program to the contract, not the concrete class — the same polymorphism idea from Lesson 8.</li>
+  </ol>
+</div>
+
+<h2>See it fail on purpose</h2>
+<p>Delete the <code>turnOn()</code> method from <code>Lamp</code> and recompile (clean build if needed — remember Lesson 11's stale <code>.class</code> trap):</p>
+<pre><code>error: Lamp is not abstract and does not override abstract method turnOn() in Switchable</code></pre>
+<p>The contract is unfulfilled, so the class won't compile. Put the method back.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="2">
+  <div class="q">What can an interface contain?</div>
+  <button class="opt" data-explain="Fields/state belong to classes, not plain interfaces.">Fields holding object state</button>
+  <button class="opt" data-explain="Method bodies are what implementing classes provide.">Finished method bodies</button>
+  <button class="opt" data-explain="Right — signatures only; the contract.">Method signatures with no bodies</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">How many interfaces can one class implement?</div>
+  <button class="opt" data-explain="Right — many interfaces, unlike extends (one class).">Many</button>
+  <button class="opt" data-explain="That's the rule for extends, not implements.">Exactly one</button>
+  <button class="opt" data-explain="Implementing zero is allowed but not the limit.">Zero — they can't be used</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">Why must <code>Lamp.turnOn()</code> be <code>public</code>?</div>
+  <button class="opt" data-explain="static is unrelated to interface visibility.">Because interfaces are static</button>
+  <button class="opt" data-explain="Right — interface methods are public; you can't narrow it.">Interface methods are public by contract</button>
+  <button class="opt" data-explain="It can have parameters or not; that's not the reason.">Because it takes no parameters</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>Create <code>InterfaceIntro.java</code> with the code above. Compile and run — confirm <code>Lamp is on</code>.</li>
+  <li>Delete <code>turnOn()</code> from <code>Lamp</code>, recompile, read the "does not override" error, then restore it.</li>
+  <li>Add a second class <code>Fan implements Switchable</code> whose <code>turnOn()</code> returns <code>"Fan is spinning"</code>. Create one in <code>main</code> and print it.</li>
+</ol>
+<p>That is the whole lesson: an interface is a contract; a class that <code>implements</code> it must provide every method.</p>
+
+<p class="source">
+  <a href="https://dev.java/learn/interfaces/">dev.java — Interfaces</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask if any error differed from what's written, or about any word. Abstract classes (Lesson 11)
+  and interfaces (here) complete the abstraction topic that was parked.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0011-abstract-classes.html">← Lesson 11</a></span>
+  <span><a href="../reference/java-abstraction.html">Reference: abstraction →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

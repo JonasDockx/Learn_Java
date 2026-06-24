@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 13 — Checkpoint: Foundations Review</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 13 · Checkpoint</p>
+<h1>Checkpoint: Foundations Review</h1>
+<p><em>No new material. Three ways to test what's stuck: explain it, recall it, build with it.</em></p>
+
+<div class="callout callout-mission">
+  This reviews Lessons 1–12. Work top to bottom, but stop whenever you want — the goal is to
+  find which ideas are solid and which need another pass, not to finish in one sitting.
+</div>
+
+<h2>Part 1 — Explain it yourself</h2>
+<p>Answer these <strong>in the chat, in your own words</strong>. Explaining out loud is the strongest test of real understanding — I'll tell you where you're exactly right and where to sharpen.</p>
+<ol>
+  <li>Trace what happens from saving <code>Hello.java</code> to seeing output. Use the words <code>javac</code>, <code>.class</code>, and <code>JVM</code>.</li>
+  <li>Why does <code>==</code> sometimes give the wrong answer when comparing <code>String</code> text, and what should you use instead?</li>
+  <li>What does <code>static</code> mean on <code>main</code>, and how is that different from a method like <code>speak()</code> on a <code>Dog</code>?</li>
+  <li>What does <code>private</code> protect, and from whom? (Think about the per-class vs per-object point.)</li>
+  <li>In one or two sentences each: how is an <strong>abstract class</strong> different from an <strong>interface</strong>?</li>
+</ol>
+
+<h2>Part 2 — Mixed quiz (recall)</h2>
+<p>These jump between topics on purpose — mixing is harder than blocked practice, and that difficulty is what builds memory.</p>
+
+<div class="quiz" data-answer="1">
+  <div class="q">What does <code>javac</code> produce from a <code>.java</code> file?</div>
+  <button class="opt" data-explain="The JVM runs bytecode; it isn't the output of javac.">A running program process</button>
+  <button class="opt" data-explain="Right — javac compiles source into .class bytecode.">A .class bytecode file</button>
+  <button class="opt" data-explain="Machine code is what the JVM produces later, not javac.">A native machine-code file</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Comparing two <code>String</code> values for equal text, you should use…</div>
+  <button class="opt" data-explain="== compares identity for objects, not text.">the == operator alone</button>
+  <button class="opt" data-explain="There is no 'is' comparison keyword in Java.">the is keyword</button>
+  <button class="opt" data-explain="Right — .equals() compares the actual characters.">the .equals() method</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">After <code>Dog b = a;</code> then <code>b.age = 4;</code>, the value of <code>a.age</code> is…</div>
+  <button class="opt" data-explain="Right — b copied a's reference; one shared object.">four, the same object</button>
+  <button class="opt" data-explain="They are not independent; b points at a's object.">three, still unchanged</button>
+  <button class="opt" data-explain="The assignment compiles and runs fine.">an immediate compile error</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">Why must <code>main</code> be <code>static</code>?</div>
+  <button class="opt" data-explain="Privacy is unrelated; that's the private keyword.">to keep it hidden away</button>
+  <button class="opt" data-explain="Right — it runs before any object is created.">no object exists yet</button>
+  <button class="opt" data-explain="static does not change execution speed.">to make it run faster</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">A <code>private</code> field is reachable from…</div>
+  <button class="opt" data-explain="Other classes are exactly who private blocks.">any class in the project</button>
+  <button class="opt" data-explain="It's per class, not restricted to one object.">only that single object</button>
+  <button class="opt" data-explain="Right — any code inside the same class.">anywhere in its class</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">Which models a "can-do" capability many unrelated classes can share?</div>
+  <button class="opt" data-explain="Right — an interface is a shared capability/contract.">an interface they implement</button>
+  <button class="opt" data-explain="A parent class models is-a identity, not shared ability.">a shared parent class</button>
+  <button class="opt" data-explain="private fields are about hiding data, not capability.">a set of private fields</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">In Git, what does <code>git commit</code> do that <code>git add</code> does not?</div>
+  <button class="opt" data-explain="add is what stages; commit goes further.">stage a file for later</button>
+  <button class="opt" data-explain="Right — commit seals a permanent save point.">record a permanent save point</button>
+  <button class="opt" data-explain="That's git init, not commit.">create a new repository</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">An <code>abstract</code> class differs from an interface because it can…</div>
+  <button class="opt" data-explain="Both can be used as a declared variable type.">be used as a type</button>
+  <button class="opt" data-explain="A class implements many interfaces, not many parents.">be extended many times</button>
+  <button class="opt" data-explain="Right — it can hold fields (state) and finished methods.">hold state and bodies</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Part 3 — Small project (build with it)</h2>
+<p>This recombines patterns you've <em>already written</em>: an interface (like <code>Switchable</code>), encapsulation (like <code>Dog</code>'s validating setter), and a loop over an array (like <code>Grades</code>). Nothing new — just assembled together. Build it in a single file, <code>Library.java</code>.</p>
+
+<h3>Step by step</h3>
+<ol>
+  <li><strong>The contract.</strong> Write an interface <code>Describable</code> with one method: <code>String describe();</code></li>
+  <li><strong>The class.</strong> Write <code>class Book implements Describable</code> with <code>private String title;</code> and <code>private int pages;</code>, a constructor, and getters. In the constructor, reject <code>pages &lt; 1</code> with an <code>IllegalArgumentException</code> (encapsulation).</li>
+  <li><strong>Fulfil the contract.</strong> Implement <code>describe()</code> to return something like <code>title + " (" + pages + " pages)"</code>.</li>
+  <li><strong>Use it.</strong> In <code>public class Library</code>'s <code>main</code>, make an array <code>Describable[] shelf = { new Book("Java", 300), new Book("Git", 120) };</code> and loop over it printing <code>describe()</code> for each.</li>
+  <li><strong>Prove the guard.</strong> Try <code>new Book("Bad", 0)</code> and run — watch your exception fire.</li>
+  <li><strong>Commit it</strong> on a branch and merge (Git practice).</li>
+</ol>
+
+<div class="callout callout-key">
+  <h3>Why this is the real test</h3>
+  If you can build this without copying from earlier files, you've genuinely integrated the core:
+  classes, objects, <code>private</code>, an interface, an array, a loop, and the compile/run cycle —
+  all at once. That integration is what "knowing Java" actually means at this stage.
+</div>
+
+<div class="callout callout-ask">
+  Do Part 1 first and send me your answers — that tells us both where the ground is firm. Then the
+  quiz, then as much of the project as you like. Stuck on any single step? Ask about <em>that step</em>.
+  We do not move past this checkpoint until it feels comfortable.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0012-interfaces.html">← Lesson 12</a></span>
+  <span><a href="../reference/key-terms.html">Reference: key terms →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

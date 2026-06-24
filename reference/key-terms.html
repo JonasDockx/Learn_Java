@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Key Terms</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Key Terms, Plainly</h1>
+<p><em>The vocabulary the OO lessons are built from. Each with a tiny example. Print this.</em></p>
+
+<h2>Body</h2>
+<p>The code <strong>inside a method's <code>{ }</code></strong> — the steps it actually runs.</p>
+<pre><code>String turnOn() { return "Lamp is on"; }   // body = return "Lamp is on";
+String turnOn();                            // NO body — ends in ; , no steps</code></pre>
+
+<h2>(Method) signature</h2>
+<p>A method's <strong>identity: its name + the inputs (parameters)</strong> it takes. How to <em>call</em> it, not what it does. The part before the <code>{</code>.</p>
+<pre><code>turnOn()          // name "turnOn", no inputs
+setAge(int age)   // name "setAge", one input of type int</code></pre>
+
+<h2>State</h2>
+<p>The <strong>data an object currently holds</strong> — the values in its fields.</p>
+<pre><code>Dog d = new Dog("Rex", 3);   // state: name = "Rex", age = 3
+d.setAge(4);                 // changes state to age = 4</code></pre>
+<p>"No state" = no fields to hold data (true of an interface).</p>
+
+<h2>To implement</h2>
+<p>Two related meanings:</p>
+<ul>
+  <li><strong>implement a method</strong> = write its body (the real code).</li>
+  <li><strong><code>implements</code></strong> (keyword) = a class promising to provide every method an interface lists.</li>
+</ul>
+<pre><code>class Lamp implements Switchable {   // promises to fulfil Switchable
+    public String turnOn() { ... }   // ...by implementing turnOn()
+}</code></pre>
+
+<h2>Contract</h2>
+<p>A <strong>promise that certain methods exist, without saying how</strong> they work. A concept, not a keyword. In Java, an <strong>interface is a contract</strong>: it lists the promises; an implementing class must deliver them.</p>
+
+<h2>Abstract class</h2>
+<p>A class you <strong>cannot build with <code>new</code></strong>; it exists only to be a parent. Can <strong>mix</strong> finished methods (with bodies) and abstract methods (no body) that subclasses must finish. A half-built blueprint.</p>
+<pre><code>abstract class Vehicle {     // can't do new Vehicle()
+    abstract String sound(); // subclasses must finish it
+}</code></pre>
+
+<h2>Interface</h2>
+<p>A <strong>pure contract</strong>: only signatures — no bodies, no state. A class <code>implements</code> it and must write all the methods. A class can implement <strong>many</strong>.</p>
+<pre><code>interface Switchable { String turnOn(); }   // just the promise</code></pre>
+
+<div class="callout callout-key">
+  <h3>In one line</h3>
+  A <strong>signature</strong> is the promise · a <strong>body</strong> is the fulfilment ·
+  <strong>state</strong> is the data an object holds · to <strong>implement</strong> is to fulfil ·
+  a <strong>contract</strong> is a set of promises · an <strong>interface</strong> is a contract in code ·
+  an <strong>abstract class</strong> is a half-built parent.
+</div>
+
+<h2>How they relate (abstract class vs interface)</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;"></th><th>Abstract class</th><th>Interface</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Bodies?</td><td>some methods can have them</td><td>no (just signatures)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">State (fields)?</td><td>yes</td><td>no</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">A class can have…</td><td>one (<code>extends</code>)</td><td>many (<code>implements</code>)</td></tr>
+</table>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0012-interfaces.html">← Lesson 12</a></span>
+  <span><a href="java-abstraction.html">Abstraction reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

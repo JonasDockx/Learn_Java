@@ -65,6 +65,36 @@ _Avoid_: redefine
 Multiple methods in one class sharing a name but taking different parameters. Resolved at compile time by the arguments. (Not the same as override.)
 _Avoid_: overriding
 
+## Structure terms
+
+**Body**:
+The code inside a method's `{ }` — the steps it runs. A declaration ending in `;` with no `{ }` has no body.
+_Avoid_: implementation block, contents
+
+**Method signature**:
+A method's identity: its name plus its parameter list. Says how to call it, not what it does.
+_Avoid_: header, prototype
+
+**State**:
+The data an object currently holds — the values in its fields. An interface has no state.
+_Avoid_: data, contents
+
+**Implement**:
+To write a method's body (provide the real code); and (`implements`) for a class to promise it provides every method of an interface.
+_Avoid_: code up, fulfil
+
+**Contract**:
+A promise that certain methods exist, without specifying how they work. A concept; in Java an interface is a contract.
+_Avoid_: agreement, spec
+
+**Abstract class**:
+A class that cannot be instantiated with `new`, existing only as a parent. May mix finished methods and abstract (body-less) methods that subclasses must implement.
+_Avoid_: base class, virtual class
+
+**Interface**:
+A pure contract — only method signatures, no bodies and no state. A class `implements` it and must provide every method; a class can implement many.
+_Avoid_: protocol, abstract class
+
 ## Git
 
 **Repository**:

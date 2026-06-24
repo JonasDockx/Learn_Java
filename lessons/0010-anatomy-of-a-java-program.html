@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 10 — Anatomy of a Java Program (a step back)</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 10 · Consolidation</p>
+<h1>Anatomy of a Java Program</h1>
+<p><em>No new material — just finally explaining the line you've typed ten times: <code>public static void main</code>.</em></p>
+
+<div class="callout callout-mission">
+  <strong>A deliberate step back.</strong> We moved fast through objects. Before going further,
+  let's make the <em>structure</em> of a Java file rock-solid — because every program you'll
+  ever write sits inside it. You already know every piece here; we're just connecting them.
+</div>
+
+<h2>The smallest complete program</h2>
+<pre><code>public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello");
+    }
+}</code></pre>
+<p>Two nested boxes: a <strong>class</strong> box, and inside it a <strong>method</strong> box. That's the shape of <em>everything</em> in Java — code always lives inside a method, which lives inside a class.</p>
+
+<h2>Decoding <code>public static void main(String[] args)</code></h2>
+<p>The JVM starts your program by calling one special method. This is it. Word by word:</p>
+
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Word</th><th>Meaning</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>public</code></td><td>The JVM is outside your class and must be allowed to call this — so not <code>private</code>. (Lesson 7.)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>static</code></td><td>Belongs to the <strong>class</strong>, not an object. At startup no object exists yet, so <code>main</code> must run without <code>new</code>.</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>void</code></td><td>Returns <strong>nothing</strong>. (Compare <code>getAge()</code>, which returns an <code>int</code>.)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>main</code></td><td>The exact name the JVM looks for. The front door must be named <code>main</code>.</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>String[] args</code></td><td>An array of Strings: command-line arguments. <code>java Hello a b</code> → <code>args = ["a","b"]</code>. Usually ignored.</td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>The one idea to keep: <code>static</code> = belongs to the class</h3>
+  <pre><code>Dog.main(...)          // static: called on the CLASS, no object needed
+new Dog("Rex").speak() // not static: called on an OBJECT you created first</code></pre>
+  <code>main</code> is <code>static</code> because it has to run <em>before</em> any object exists.
+  Object methods like <code>speak()</code> are not static — they need a specific Dog to act on.
+  That single distinction is the heart of this lesson.
+</div>
+
+<h2>Why a class and its test live in separate files</h2>
+<p>
+Remember Lesson 7: <code>private</code> protects a class from <em>other</em> classes. So to truly
+test that protection, the test has to be a separate class — that's why we put <code>main</code> in
+its own file (like <code>DogDemo</code>) rather than inside <code>Dog</code>. Same reason real
+projects keep <code>Dog.java</code> and a separate <code>DogTest.java</code>.
+</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">Why must <code>main</code> be <code>static</code>?</div>
+  <button class="opt" data-explain="Speed isn't the reason.">Because it makes the program faster</button>
+  <button class="opt" data-explain="Right — no object exists at startup, so it runs on the class.">It must run before any object exists</button>
+  <button class="opt" data-explain="static isn't about privacy; that's private.">To keep the method private</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">What does <code>void</code> tell you about <code>main</code>?</div>
+  <button class="opt" data-explain="Right — void means it returns nothing.">It returns nothing</button>
+  <button class="opt" data-explain="That would be a return type like int.">It returns a number</button>
+  <button class="opt" data-explain="void is a return type, not a visibility level.">It can be seen everywhere</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Which call is <em>not</em> static — needs an object first?</div>
+  <button class="opt" data-explain="main is static, called on the class by the JVM.">Hello.main(args)</button>
+  <button class="opt" data-explain="println is called on the System.out object, but the pattern you OWN is the next one.">System.out.println(x)</button>
+  <button class="opt" data-explain="Right — speak() needs a Dog object made with new first.">new Dog(\"Rex\").speak()</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (small and calm)</h2>
+<ol>
+  <li>Open your simplest file, <code>Hello.java</code>. Read the two boxes out loud: "a class named Hello, containing a method named main."</li>
+  <li>In <code>main</code>, add a line: <code>System.out.println(args.length);</code>. Run <code>java Hello</code> → prints <code>0</code>. Then run <code>java Hello cat dog</code> → prints <code>2</code>. That's <code>String[] args</code> made real.</li>
+  <li>That's it. No new concepts today — just say, in your own words, what each word of <code>public static void main</code> means. If any word is fuzzy, ask me about <em>that one word</em>.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/getting-started/main/">dev.java — The <code>main</code> method</a>.
+  The official explanation of the entry point. A gentle read.
+</p>
+
+<div class="callout callout-ask">
+  <strong>This is the moment to ask anything.</strong> Nothing here should feel shaky before we
+  go on. Confused about <code>static</code>? About classes vs objects? About why we have so many
+  files? Ask — we'll stay right here until it's comfortable. There's no rush, and you are not behind.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0009-abstraction-interfaces.html">← Lesson 09 (parked)</a></span>
+  <span><a href="../reference/java-toolchain.html">Toolchain reference →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
