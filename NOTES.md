@@ -21,6 +21,11 @@ Working notes and preferences for teaching Jonas.
   the explanation or the next step. (Pace stays slow; tone is just plain.) See
   [[0011-communication-style-direct]].
 
+## Tooling quirks
+- Opening lessons via Bash `cmd.exe /c start "" "lessons\\..."` does NOT open the file in
+  his environment. Use PowerShell `Start-Process "<path>"` instead, or just give him the
+  clickable path and let him open it manually (he's fine doing that).
+
 ## Pace (IMPORTANT — corrected after Lesson 9)
 
 - Lessons 7–9 went TOO FAST. One concept per turn with no consolidation overshot his
