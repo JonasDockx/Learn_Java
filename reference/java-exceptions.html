@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Exceptions (try/catch)</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Exceptions: try / catch</h1>
+<p><em>Survive a thrown error instead of crashing. Print this.</em></p>
+
+<h2>The shape</h2>
+<pre><code>try {
+    riskyThing();              // might throw
+    System.out.println("ok");  // skipped if it throws
+} catch (IllegalArgumentException e) {
+    System.out.println("handled: " + e.getMessage());
+}
+// execution continues here either way</code></pre>
+
+<h2>Parts</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Part</th><th>Meaning</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>try { }</code></td><td>attempt code that might throw</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>catch (Type e)</code></td><td>run this if that type was thrown</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>e.getMessage()</code></td><td>the message given when thrown</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>throw new ...</code></td><td>raise an exception yourself</td></tr>
+</table>
+
+<h2>Python → Java</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Python</th><th>Java</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>try:</code></td><td><code>try { }</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>except T as e:</code></td><td><code>catch (T e) { }</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>raise T("msg")</code></td><td><code>throw new T("msg");</code></td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>Why it matters</h3>
+  An uncaught exception <strong>stops the program</strong> — every later line is skipped.
+  <code>catch</code> turns that crash into a handled case so execution continues. Essential
+  once a program must keep serving (web servers, anything long-running).
+</div>
+
+<h2>Reading a stack trace</h2>
+<pre><code>at Book.validatePages(Library.java:35)   ← where it was thrown
+at Book.&lt;init&gt;(Library.java:20)          ← who called that (&lt;init&gt; = constructor)
+at Library.main(Library.java:3)          ← where it started</code></pre>
+<p>Top line = where it broke. The exception's message = what went wrong. Scan for the first line number in <em>your</em> file.</p>
+
+<h2>Not yet covered (later small lessons)</h2>
+<p><code>finally</code> · multiple <code>catch</code> blocks · checked vs unchecked exceptions · writing your own exception class.</p>
+
+<p class="source">
+  <a href="https://dev.java/learn/exceptions/">dev.java — Exceptions</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0014-exceptions-try-catch.html">← Lesson 14</a></span>
+  <span><a href="key-terms.html">Key terms reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

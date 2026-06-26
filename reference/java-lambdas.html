@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Functional Interfaces &amp; Lambdas</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Functional Interfaces &amp; Lambdas</h1>
+<p><em>A lambda implements a one-method interface, inline. Print this.</em></p>
+
+<h2>Functional interface</h2>
+<pre><code>interface Greeter {           // exactly ONE abstract method
+    String greet(String name);
+}</code></pre>
+
+<h2>Lambda syntax</h2>
+<pre><code>Greeter g = name -&gt; "Hi " + name;
+//          └params┘ └arrow┘ └result┘
+
+Adder sum = (a, b) -&gt; a + b;        // 2+ params: parentheses
+Runnable r = () -&gt; doSomething();    // 0 params: empty ()
+// multi-line body uses braces + return:
+Greeter g2 = name -&gt; {
+    String upper = name.toUpperCase();
+    return "HI " + upper;
+};</code></pre>
+
+<h2>Calling it</h2>
+<pre><code>g.greet("Jonas");     // call the single method, as normal</code></pre>
+
+<div class="callout callout-key">
+  <h3>The rule</h3>
+  Left of <code>-&gt;</code> = parameters · right = result. The lambda's type is a functional
+  interface; Java infers the method and parameter types from it, so you write only the logic.
+  A lambda is always an implementation of some one-method interface — Java has no standalone functions.
+</div>
+
+<h2>Python → Java</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Python</th><th>Java</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>lambda x: x + 1</code></td><td><code>x -&gt; x + 1</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>lambda a, b: a + b</code></td><td><code>(a, b) -&gt; a + b</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">any callable</td><td>must match a functional interface</td></tr>
+</table>
+
+<h2>Why it matters</h2>
+<p>Lambdas are the input to <strong>streams</strong> (<code>filter</code>, <code>map</code>, …) and appear all over modern Java (comparators, event handlers, Spring callbacks).</p>
+
+<p class="source">
+  <a href="https://dev.java/learn/lambdas/">dev.java — Lambdas</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0018-functional-interfaces-lambdas.html">← Lesson 18</a></span>
+  <span><a href="java-abstraction.html">Abstraction reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 15 — ArrayList (a resizable list)</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 15 · Advanced · Data Structures</p>
+<h1>ArrayList — a Resizable List</h1>
+<p><em>One idea: a list that grows and shrinks, unlike a fixed-size array.</em></p>
+
+<div class="callout callout-mission">
+  Your <code>Describable[] shelf</code> had its size fixed the moment you created it — you can't
+  add a book later. An <code>ArrayList</code> is the everyday answer: add and remove items freely.
+  This is the closest thing to a Python <code>list</code>, and you'll use it constantly.
+</div>
+
+<h2>The problem with arrays</h2>
+<pre><code>String[] names = new String[2];   // exactly 2 slots, forever
+names[0] = "Ann";
+names[1] = "Bob";
+// names[2] = "Cy";   // ✗ crash — no third slot</code></pre>
+<p>An array's length is locked at creation. When you don't know how many items you'll have, you need something that grows.</p>
+
+<h2>ArrayList — straight from the Python list</h2>
+<pre><code># Python                       // Java
+import = (built in)            import java.util.ArrayList;   // needed: it's in java.util
+
+names = []                     ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();
+names.append("Ann")            names.add("Ann");
+names.append("Bob")            names.add("Bob");
+names[0]                       names.get(0);        // "Ann"
+len(names)                     names.size();        // 2
+names.remove("Ann")           names.remove("Ann");</code></pre>
+
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem; margin-top:0.5rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Python</th><th>Java</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>[]</code> (literal)</td><td><code>new ArrayList&lt;&gt;()</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>.append(x)</code></td><td><code>.add(x)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>lst[i]</code></td><td><code>.get(i)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>len(lst)</code></td><td><code>.size()</code></td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>Three things to notice</h3>
+  <ol>
+    <li><strong><code>import java.util.ArrayList;</code></strong> — <code>ArrayList</code> lives in another package (<code>java.util</code>), so you must import it. (Remember: same-package classes need no import; this one isn't.)</li>
+    <li><strong><code>&lt;String&gt;</code></strong> — the type of thing the list holds. <code>ArrayList&lt;String&gt;</code> can hold <em>only</em> Strings; static typing applies to the contents too. (The full story of <code>&lt;&gt;</code> is "generics", a later lesson — for now: "a list of Strings".)</li>
+    <li><strong>Methods, not operators</strong> — Java uses <code>.add()</code>, <code>.get(i)</code>, <code>.size()</code> where Python uses <code>append</code>, <code>[i]</code>, and <code>len()</code>.</li>
+  </ol>
+</div>
+
+<h2>The whole thing in one file</h2>
+<pre><code>import java.util.ArrayList;
+
+public class ListIntro {
+    public static void main(String[] args) {
+        ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();
+
+        names.add("Ann");
+        names.add("Bob");
+        names.add("Cy");          // grows freely — no fixed size
+        names.remove("Bob");      // shrinks too
+
+        System.out.println("count: " + names.size());   // 2
+
+        for (String name : names) {     // same for-each you already know
+            System.out.println(name);
+        }
+    }
+}</code></pre>
+<p>Compile and run → <code>count: 2</code>, then <code>Ann</code> and <code>Cy</code>.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">Why must you write <code>import java.util.ArrayList;</code>?</div>
+  <button class="opt" data-explain="java.lang is auto-imported; java.util is not.">Every class needs an import line</button>
+  <button class="opt" data-explain="Right — ArrayList is in another package, java.util.">It lives in another package</button>
+  <button class="opt" data-explain="Imports aren't about speed at all.">It makes the list run faster</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">What does <code>&lt;String&gt;</code> in <code>ArrayList&lt;String&gt;</code> mean?</div>
+  <button class="opt" data-explain="It's not the size; lists grow freely.">the fixed length of the list</button>
+  <button class="opt" data-explain="It's not the variable's name either.">the name of the list</button>
+  <button class="opt" data-explain="Right — the type of element the list holds.">the type it can hold</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">Python's <code>names.append("x")</code> becomes which Java call?</div>
+  <button class="opt" data-explain="Right — .add() is Java's append.">names.add("x")</button>
+  <button class="opt" data-explain="get(i) reads an element; it doesn't add.">names.get("x")</button>
+  <button class="opt" data-explain="size() reports the count; it doesn't add.">names.size("x")</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>Create <code>ListIntro.java</code> with the code above. Compile and run — confirm <code>count: 2</code> and the two names.</li>
+  <li>Forget the import on purpose: delete the <code>import</code> line and recompile. Read the "cannot find symbol: class ArrayList" error, then restore it.</li>
+  <li>Add two more names, remove one, and print <code>names.size()</code> and the list. Confirm the count matches.</li>
+  <li>Try <code>names.add(42);</code> — read the compile error. The list is <code>&lt;String&gt;</code>, so a number is rejected. That's static typing on the contents.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/api/collections-framework/lists/">dev.java — Lists</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. Coming small lessons: the <code>List</code> interface vs <code>ArrayList</code>
+  (programming to the contract — you've seen that idea), other collections like <code>HashMap</code>
+  (Python's <code>dict</code>), and then generics — the real meaning of <code>&lt;&gt;</code>.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0014-exceptions-try-catch.html">← Lesson 14</a></span>
+  <span><a href="../reference/java-collections.html">Reference: collections →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

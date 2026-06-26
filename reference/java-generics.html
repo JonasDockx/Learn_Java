@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Generics</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Generics</h1>
+<p><em>What <code>&lt;&gt;</code> means: a type placeholder filled in by the caller. Print this.</em></p>
+
+<h2>Using generics (the common case)</h2>
+<pre><code>ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();   // a list of String
+HashMap&lt;String, Integer&gt; map = new HashMap&lt;&gt;(); // key String, value Integer</code></pre>
+<p>The type in <code>&lt;&gt;</code> fills the class's placeholder, so the compiler enforces the contents and you never cast.</p>
+
+<h2>Writing a generic class</h2>
+<pre><code>class Box&lt;T&gt; {            // T = placeholder for a type chosen later
+    private T item;
+    public void put(T item) { this.item = item; }
+    public T get() { return item; }
+}
+
+Box&lt;String&gt;  s = new Box&lt;&gt;();   // every T becomes String
+Box&lt;Integer&gt; n = new Box&lt;&gt;();   // every T becomes Integer</code></pre>
+
+<h2>Placeholder names (convention)</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Letter</th><th>Usually</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>T</code></td><td>Type</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>E</code></td><td>Element (<code>List&lt;E&gt;</code>)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>K</code>, <code>V</code></td><td>Key, Value (<code>Map&lt;K,V&gt;</code>)</td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>Why generics</h3>
+  <strong>One class, many types, type-safe.</strong> Write <code>Box&lt;T&gt;</code> once instead of
+  <code>StringBox</code>/<code>IntBox</code>; the compiler rejects the wrong type at compile time and
+  removes the need for casts. Generics are how static typing reaches inside containers.
+</div>
+
+<h2>Python comparison</h2>
+<p>Python containers hold anything; type hints (<code>list[str]</code>) are optional and unenforced. Java's <code>&lt;&gt;</code> is enforced by the compiler.</p>
+
+<h2>Not yet covered</h2>
+<p>Bounded types <code>&lt;T extends Number&gt;</code> · wildcards <code>&lt;?&gt;</code> · generic methods. Advanced; rarely needed early.</p>
+
+<p class="source">
+  <a href="https://dev.java/learn/generics/intro/">dev.java — Generics</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0017-generics.html">← Lesson 17</a></span>
+  <span><a href="java-collections.html">Collections reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

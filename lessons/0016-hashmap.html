@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 16 — HashMap (key → value)</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 16 · Advanced · Data Structures</p>
+<h1>HashMap — Look Up by Key</h1>
+<p><em>One idea: store values under a key and fetch them back by that key.</em></p>
+
+<div class="callout callout-mission">
+  A list finds things by <em>position</em> (<code>get(0)</code>). Often you want to find by a
+  <em>name</em> instead — "what's Ann's age?" A <code>HashMap</code> does that: it stores
+  <strong>key → value</strong> pairs. It's Python's <code>dict</code>, and it's everywhere in real code.
+</div>
+
+<h2>HashMap — straight from the Python dict</h2>
+<pre><code># Python                          // Java
+import = (built in)               import java.util.HashMap;
+
+ages = {}                         HashMap&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();
+ages["Ann"] = 30                  ages.put("Ann", 30);
+ages["Ann"]                       ages.get("Ann");          // 30
+"Bob" in ages                     ages.containsKey("Bob");  // false
+len(ages)                         ages.size();              // 1</code></pre>
+
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem; margin-top:0.5rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Python dict</th><th>Java HashMap</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>{}</code></td><td><code>new HashMap&lt;&gt;()</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>d[k] = v</code></td><td><code>d.put(k, v)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>d[k]</code></td><td><code>d.get(k)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>k in d</code></td><td><code>d.containsKey(k)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>len(d)</code></td><td><code>d.size()</code></td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>Two things to notice</h3>
+  <ol>
+    <li><strong>Two types in the <code>&lt;&gt;</code>:</strong> <code>HashMap&lt;String, Integer&gt;</code> means
+    keys are <code>String</code>, values are <code>Integer</code>. Key type first, value type second.</li>
+    <li><strong><code>Integer</code>, not <code>int</code>:</strong> collections hold <em>objects</em>, and
+    <code>Integer</code> is the object form of the primitive <code>int</code>. Java converts between them
+    automatically, so you still write <code>ages.put("Ann", 30)</code>. (Why there are two forms is a
+    later detail — for now: in collections, use <code>Integer</code>.)</li>
+  </ol>
+</div>
+
+<h2>The whole thing in one file</h2>
+<pre><code>import java.util.HashMap;
+
+public class MapIntro {
+    public static void main(String[] args) {
+        HashMap&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();
+
+        ages.put("Ann", 30);
+        ages.put("Bob", 25);
+        ages.put("Ann", 31);          // same key overwrites — now Ann is 31
+
+        System.out.println("Ann is " + ages.get("Ann"));       // 31
+        System.out.println("Has Cy? " + ages.containsKey("Cy")); // false
+        System.out.println("count: " + ages.size());            // 2
+
+        for (String name : ages.keySet()) {     // loop over the keys
+            System.out.println(name + " -> " + ages.get(name));
+        }
+    }
+}</code></pre>
+<p>Compile and run. Note <code>put</code> with an existing key <strong>overwrites</strong> the old value — same as a Python dict.</p>
+
+<h2>One gotcha: missing keys return <code>null</code></h2>
+<pre><code>ages.get("Nobody")   // returns null (not a crash) — there's no such key</code></pre>
+<p>Where Python raises <code>KeyError</code>, Java hands back <code>null</code> (an arrow pointing at nothing — Lesson 4). Use <code>containsKey</code> first when you're unsure.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">In <code>HashMap&lt;String, Integer&gt;</code>, what is <code>Integer</code>?</div>
+  <button class="opt" data-explain="String is the key type, listed first.">the type of the keys</button>
+  <button class="opt" data-explain="Right — the second type is the value type.">the type of the values</button>
+  <button class="opt" data-explain="Size isn't part of the type declaration.">the size of the map</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q"><code>ages.put("Ann", 31)</code> when "Ann" already maps to 30…</div>
+  <button class="opt" data-explain="It doesn't error; keys are meant to be reused.">throws a duplicate error</button>
+  <button class="opt" data-explain="It doesn't keep both; one key holds one value.">keeps both 30 and 31</button>
+  <button class="opt" data-explain="Right — the new value overwrites the old.">replaces 30 with 31</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q"><code>ages.get("Nobody")</code> for a missing key returns…</div>
+  <button class="opt" data-explain="Right — null, not a crash (unlike Python's KeyError).">null, no crash</button>
+  <button class="opt" data-explain="Java returns null here rather than raising.">a thrown KeyError</button>
+  <button class="opt" data-explain="It doesn't invent a zero; it returns null.">the number zero</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>Create <code>MapIntro.java</code> with the code above. Compile and run — confirm Ann is 31, the count is 2, and the loop prints both pairs.</li>
+  <li>Add <code>System.out.println(ages.get("Nobody"));</code> and run — see <code>null</code> printed, no crash.</li>
+  <li>Add two more people, overwrite one with <code>put</code>, and confirm <code>size()</code> only counts distinct keys.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/api/collections-framework/maps/">dev.java — Maps</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. Related ideas for later small lessons: the <code>List</code>/<code>Map</code>
+  interfaces vs the concrete <code>ArrayList</code>/<code>HashMap</code> (the
+  <code>List&lt;String&gt; x = new ArrayList&lt;&gt;()</code> idiom — programming to the contract), the
+  <code>int</code> vs <code>Integer</code> story (autoboxing), and then generics: what <code>&lt;&gt;</code>
+  really is.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0015-arraylist.html">← Lesson 15</a></span>
+  <span><a href="../reference/java-collections.html">Reference: collections →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 17 — Generics (what &lt;&gt; means)</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 17 · Advanced</p>
+<h1>Generics: What <code>&lt;&gt;</code> Really Means</h1>
+<p><em>One idea: <code>&lt;&gt;</code> is a type you plug into a placeholder the class was written with.</em></p>
+
+<div class="callout callout-mission">
+  You've written <code>ArrayList&lt;String&gt;</code> and <code>HashMap&lt;String, Integer&gt;</code>. This
+  lesson shows where that <code>&lt;String&gt;</code> goes and why it exists — by writing your own tiny
+  class that uses it. After this, <code>&lt;&gt;</code> stops being magic.
+</div>
+
+<h2>The idea: a type left blank, filled in later</h2>
+<p>
+<code>ArrayList</code> was written without committing to <em>what</em> it holds. Its author left a
+<strong>placeholder</strong>. When you write <code>ArrayList&lt;String&gt;</code>, you fill that
+placeholder with <code>String</code> — so this particular list holds Strings, and the compiler enforces it.
+</p>
+<p>The placeholder has a name. By convention it's a single capital letter, often <code>T</code> (for "Type"):</p>
+
+<pre><code>class Box&lt;T&gt; {          // T is a placeholder for "some type, chosen later"
+    private T item;     // a field of that type
+    public void put(T item) { this.item = item; }
+    public T get() { return item; }
+}</code></pre>
+
+<p>Now <code>T</code> becomes whatever you put in the <code>&lt;&gt;</code> when you create one:</p>
+<pre><code>Box&lt;String&gt; s = new Box&lt;&gt;();   // every T in Box becomes String
+s.put("hello");
+String text = s.get();          // comes back as String — no cast needed
+
+Box&lt;Integer&gt; n = new Box&lt;&gt;();  // every T becomes Integer
+n.put(42);
+int number = n.get();           // comes back as Integer/int</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  <code>Box&lt;T&gt;</code> is written <strong>once</strong> but works for <strong>any</strong> type, and
+  stays <strong>type-safe</strong>: a <code>Box&lt;String&gt;</code> only accepts Strings and only returns
+  Strings. That's exactly what <code>ArrayList&lt;String&gt;</code> is — a list class written with a
+  placeholder, which you filled with <code>String</code>.
+</div>
+
+<h2>Why it exists: safety without duplication</h2>
+<p>Generics solve two problems at once:</p>
+<ul>
+  <li><strong>No duplication</strong> — you don't write a <code>StringBox</code>, an <code>IntBox</code>, a <code>DogBox</code>… one <code>Box&lt;T&gt;</code> covers all.</li>
+  <li><strong>Type safety at compile time</strong> — <code>Box&lt;String&gt;</code> rejects a number <em>when you compile</em>, not as a surprise crash later. The compiler also knows <code>get()</code> returns a String, so you never cast.</li>
+</ul>
+<p><em>Python comparison:</em> a Python list holds anything and types are checked never (or only by optional, unenforced hints like <code>list[str]</code>). Java pushes that type into the container and the compiler enforces it — generics are how static typing reaches inside collections.</p>
+
+<h2>Naming convention (you'll see these)</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Letter</th><th>Usually means</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>T</code></td><td>Type (generic)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>E</code></td><td>Element (used by <code>List&lt;E&gt;</code>)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>K</code>, <code>V</code></td><td>Key, Value (used by <code>Map&lt;K,V&gt;</code>)</td></tr>
+</table>
+<p>They're just names for the placeholder — like a parameter name, but for a type instead of a value.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="2">
+  <div class="q">In <code>ArrayList&lt;String&gt;</code>, what is <code>String</code> doing?</div>
+  <button class="opt" data-explain="It's not the variable name.">naming the list variable</button>
+  <button class="opt" data-explain="Lists grow; it's not a size.">setting a fixed length</button>
+  <button class="opt" data-explain="Right — it fills the type placeholder the class left open.">filling the type placeholder</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">In <code>class Box&lt;T&gt;</code>, what is <code>T</code>?</div>
+  <button class="opt" data-explain="Right — a placeholder for a type chosen when used.">a placeholder for a type</button>
+  <button class="opt" data-explain="It's not a field; fields are declared with it.">a field holding data</button>
+  <button class="opt" data-explain="It's not a fixed class name.">a class named T</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">A main benefit of generics is that you…</div>
+  <button class="opt" data-explain="They add type info; they don't remove typing.">drop static typing entirely</button>
+  <button class="opt" data-explain="Right — one class, many types, checked at compile time.">reuse one class type-safely</button>
+  <button class="opt" data-explain="Generics aren't about runtime speed.">make programs run faster</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>Put <code>Box&lt;T&gt;</code> and a <code>main</code> in one file <code>BoxIntro.java</code> (a <code>public class BoxIntro</code> with <code>main</code>, plus <code>class Box&lt;T&gt;</code> below). Create a <code>Box&lt;String&gt;</code>, put text in, get it out, print it.</li>
+  <li>Create a <code>Box&lt;Integer&gt;</code>, put <code>42</code> in, get it out, print it. One class, two types.</li>
+  <li>On your <code>Box&lt;String&gt;</code>, try <code>s.put(42);</code> and compile — read the type error. The placeholder is now <code>String</code>, so a number is rejected.</li>
+  <li>Notice you never wrote a cast on <code>get()</code> — the compiler already knows the type. That's the payoff.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/generics/intro/">dev.java — Introducing Generics</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. This is the "consumer + a first taste of authoring" view; deeper generics
+  (bounded types like <code>&lt;T extends Number&gt;</code>, wildcards <code>&lt;?&gt;</code>) are advanced and
+  rarely needed early. You now understand every <code>&lt;&gt;</code> you've written.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0016-hashmap.html">← Lesson 16</a></span>
+  <span><a href="../reference/java-generics.html">Reference: generics →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

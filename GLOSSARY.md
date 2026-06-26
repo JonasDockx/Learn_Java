@@ -95,6 +95,16 @@ _Avoid_: base class, virtual class
 A pure contract — only method signatures, no bodies and no state. A class `implements` it and must provide every method; a class can implement many.
 _Avoid_: protocol, abstract class
 
+## Exceptions
+
+**Exception**:
+An object representing a problem detected while running. Thrown with `throw new ...`; if uncaught it stops the program and prints a stack trace.
+_Avoid_: error (means something more specific in Java), bug
+
+**try / catch**:
+`try` wraps code that might throw; the matching `catch (Type e)` runs instead of crashing if that type is thrown, letting execution continue.
+_Avoid_: try/except (that's Python), error handling
+
 ## Git
 
 **Repository**:

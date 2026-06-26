@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 14 — Exception Handling (try/catch)</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 14 · Advanced</p>
+<h1>Exception Handling: <code>try</code> / <code>catch</code></h1>
+<p><em>One idea: catch an error so the program keeps running instead of crashing.</em></p>
+
+<div class="callout callout-mission">
+  You just watched <code>Library</code> die on an uncaught <code>IllegalArgumentException</code> —
+  the program stopped and nothing after it ran. This lesson is the tool that prevents that:
+  wrap the risky code, handle the problem, carry on.
+</div>
+
+<h2>The problem</h2>
+<p>
+When code <code>throw</code>s an exception and nobody catches it, the program <strong>stops
+immediately</strong> — every line after the failure is skipped, and you get a stack trace. That's
+fine for a tiny script, but a real program (a web server handling requests) must not die because
+one input was bad.
+</p>
+
+<h2>The shape — straight from Python</h2>
+<p>You know this structure from Python; Java renames the keywords:</p>
+<pre><code># Python                          // Java
+try:                              try {
+    check_age(age)                    checkAge(age);
+except ValueError as e:           } catch (IllegalArgumentException e) {
+    print("bad:", e)                  System.out.println("bad: " + e.getMessage());
+                                  }</code></pre>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem; margin-top:0.5rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Python</th><th>Java</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>try:</code></td><td><code>try { }</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>except ValueError as e:</code></td><td><code>catch (IllegalArgumentException e) { }</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>str(e)</code></td><td><code>e.getMessage()</code></td></tr>
+</table>
+
+<h2>What it means</h2>
+<ul>
+  <li><strong><code>try { ... }</code></strong> — "attempt this; it might throw."</li>
+  <li><strong><code>catch (IllegalArgumentException e) { ... }</code></strong> — "if it threw <em>this kind</em> of exception, run this instead of crashing." <code>e</code> is the exception object.</li>
+  <li><strong><code>e.getMessage()</code></strong> — the text that was put in the exception when it was thrown (your <code>"age cannot be negative"</code>).</li>
+</ul>
+
+<h2>The whole thing in one file</h2>
+<p>Put this in <code>TryCatchIntro.java</code>:</p>
+<pre><code>public class TryCatchIntro {
+    public static void main(String[] args) {
+        int[] ages = {25, -3, 40};
+
+        for (int age : ages) {
+            try {
+                checkAge(age);
+                System.out.println(age + " is valid");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Skipped: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Program finished normally");   // this STILL runs
+    }
+
+    static void checkAge(int age) {
+        if (age &lt; 0) {
+            throw new IllegalArgumentException("age cannot be negative: " + age);
+        }
+    }
+}</code></pre>
+
+<p>Compile and run. Output:</p>
+<pre><code>25 is valid
+Skipped: age cannot be negative: -3
+40 is valid
+Program finished normally</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  The bad value (<code>-3</code>) threw, <code>catch</code> handled it, and the loop
+  <strong>kept going</strong> to <code>40</code> — then the final line ran too. Catching converts
+  a fatal crash into a handled bump in the road. Without the <code>try</code>/<code>catch</code>,
+  the program would stop at <code>-3</code> and never reach <code>40</code> or
+  "finished".
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="2">
+  <div class="q">When code in a <code>try</code> block throws, the matching <code>catch</code>…</div>
+  <button class="opt" data-explain="The program does not stop — that's the whole point.">stops the whole program</button>
+  <button class="opt" data-explain="It doesn't silently ignore; it runs your handler.">ignores the error silently</button>
+  <button class="opt" data-explain="Right — the catch block runs instead of crashing.">runs instead of crashing</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">What does <code>e.getMessage()</code> return?</div>
+  <button class="opt" data-explain="Right — the text supplied when the exception was thrown.">the text of the exception</button>
+  <button class="opt" data-explain="It returns the message, not a line number.">the line number of the error</button>
+  <button class="opt" data-explain="It doesn't restart anything; it reads the message.">a restart of the program</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">Python's <code>except</code> corresponds to which Java keyword?</div>
+  <button class="opt" data-explain="try opens the attempt; it isn't the handler.">the try keyword</button>
+  <button class="opt" data-explain="Right — catch is Java's except.">the catch keyword</button>
+  <button class="opt" data-explain="throw raises an exception; it doesn't handle one.">the throw keyword</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>Create <code>TryCatchIntro.java</code> with the code above. Compile and run — confirm all four output lines, including "finished".</li>
+  <li><strong>Remove the safety net:</strong> temporarily replace the whole <code>try</code>/<code>catch</code> with just <code>checkAge(age);</code> and <code>System.out.println(age + " is valid");</code>. Run it — watch it crash at <code>-3</code>; <code>40</code> and "finished" never print. Then put the <code>try</code>/<code>catch</code> back.</li>
+  <li>Add another bad age (e.g. <code>-99</code>) to the array and confirm both are skipped and the program still finishes.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/exceptions/catching-handling/">dev.java — Catching and Handling Exceptions</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything here. Later, small lessons cover the rest of this topic: <code>finally</code>
+  (code that always runs), catching <em>different</em> exception types, the difference between
+  checked and unchecked exceptions, and writing your own exception class. Today is just:
+  <code>try</code> to survive a throw.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0013-checkpoint-foundations.html">← Lesson 13</a></span>
+  <span><a href="../reference/java-exceptions.html">Reference: exceptions →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 18 — Functional Interfaces &amp; Lambdas</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 18 · Advanced</p>
+<h1>Functional Interfaces &amp; Lambdas</h1>
+<p><em>One idea: a lambda is a short way to implement an interface that has exactly one method.</em></p>
+
+<div class="callout callout-mission">
+  Implementing an interface so far meant writing a whole class (like <code>Lamp implements
+  Switchable</code>). When the interface has just <em>one</em> method, that's a lot of ceremony for
+  one line of logic. A <strong>lambda</strong> is the shortcut — and it's the foundation of streams,
+  next lesson.
+</div>
+
+<h2>The setup: a one-method interface</h2>
+<p>An interface with <strong>exactly one</strong> abstract method is called a <strong>functional interface</strong>:</p>
+<pre><code>interface Greeter {
+    String greet(String name);     // one method — that makes it "functional"
+}</code></pre>
+
+<h2>The long way vs the lambda</h2>
+<p>To provide an implementation, you <em>could</em> write a full class. But if all you have is one method, Java lets you write <strong>just the method</strong>, inline, as a lambda:</p>
+
+<pre><code>// The whole class, just to hold one method:
+class FriendlyGreeter implements Greeter {
+    public String greet(String name) { return "Hi " + name; }
+}
+Greeter g1 = new FriendlyGreeter();
+
+// The lambda — same thing, one line:
+Greeter g2 = name -&gt; "Hi " + name;</code></pre>
+
+<p>Both give you a <code>Greeter</code> whose <code>greet</code> returns <code>"Hi " + name</code>. You call them identically:</p>
+<pre><code>System.out.println(g2.greet("Jonas"));   // Hi Jonas</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight — read the arrow</h3>
+  <pre><code>name  -&gt;  "Hi " + name
+ ↑params  ↑arrow  ↑what it returns</code></pre>
+  Left of <code>-&gt;</code> are the method's parameters; right of it is the result. Java already knows
+  from the <code>Greeter</code> type that this lambda <em>is</em> a <code>greet</code> method, so you
+  skip the class name, the method name, and the types. You're writing only the part that differs:
+  the logic.
+</div>
+
+<h2>Python comparison</h2>
+<pre><code># Python                        // Java
+greet = lambda name: "Hi " + name   Greeter greet = name -&gt; "Hi " + name;
+greet("Jonas")                      greet.greet("Jonas");</code></pre>
+<p>Nearly identical idea. The Java difference: a lambda must match a <strong>functional interface</strong> (here <code>Greeter</code>) — that interface is the lambda's "type". Java has no free-floating functions; a lambda is always an implementation of some one-method interface.</p>
+
+<h2>Multiple parameters</h2>
+<pre><code>interface Adder { int add(int a, int b); }
+
+Adder sum = (a, b) -&gt; a + b;     // two params: wrap them in ( )
+System.out.println(sum.add(2, 3));   // 5</code></pre>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">What makes an interface a "functional interface"?</div>
+  <button class="opt" data-explain="The count of methods matters, and it's not zero.">It has no methods at all</button>
+  <button class="opt" data-explain="Right — exactly one abstract method.">It has exactly one method</button>
+  <button class="opt" data-explain="Number of fields isn't the criterion.">It has many fields</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">In <code>name -&gt; "Hi " + name</code>, what is <code>name</code>?</div>
+  <button class="opt" data-explain="It's not a return; the return is on the right.">the returned value</button>
+  <button class="opt" data-explain="It's not the interface's name.">the interface's name</button>
+  <button class="opt" data-explain="Right — the method's parameter.">the method's parameter</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">A lambda in Java is always…</div>
+  <button class="opt" data-explain="Right — it implements some one-method interface.">an implementation of a functional interface</button>
+  <button class="opt" data-explain="Java has no standalone functions like that.">a free-standing function</button>
+  <button class="opt" data-explain="It's behaviour, not stored data.">a field holding data</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>In <code>LambdaIntro.java</code>: a <code>public class LambdaIntro</code> with <code>main</code>, plus <code>interface Greeter { String greet(String name); }</code> below.</li>
+  <li>In <code>main</code>, make a lambda <code>Greeter g = name -&gt; "Hi " + name;</code> and print <code>g.greet("Jonas")</code>.</li>
+  <li>Make a second <code>Greeter</code> with different logic, e.g. <code>name -&gt; "Hello, " + name + "!"</code>. Same interface, different behaviour — print it.</li>
+  <li>Add <code>interface Adder { int add(int a, int b); }</code> and a lambda <code>(a, b) -&gt; a + b</code>; print <code>add(2, 3)</code>.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/lambdas/">dev.java — Lambda Expressions</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. Next lesson — <strong>streams</strong> — is where lambdas pay off: you'll write
+  <code>list.stream().filter(x -&gt; ...).map(x -&gt; ...)</code>, and each <code>x -&gt; ...</code> is a lambda
+  exactly like the ones here. This lesson is the groundwork for that.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0017-generics.html">← Lesson 17</a></span>
+  <span><a href="../reference/java-lambdas.html">Reference: lambdas →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

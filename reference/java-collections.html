@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — ArrayList</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>ArrayList</h1>
+<p><em>The everyday resizable list. Print this.</em></p>
+
+<h2>Setup</h2>
+<pre><code>import java.util.ArrayList;            // it's in java.util — must import
+
+ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();   // a list of Strings, empty</code></pre>
+<p><code>&lt;String&gt;</code> = the element type (what it holds). The empty <code>&lt;&gt;</code> on the right infers the same type.</p>
+
+<h2>Common operations</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Do</th><th>Java</th><th>Python</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">add to end</td><td><code>names.add("Ann")</code></td><td><code>names.append("Ann")</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">read by index</td><td><code>names.get(0)</code></td><td><code>names[0]</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">count</td><td><code>names.size()</code></td><td><code>len(names)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">remove</td><td><code>names.remove("Ann")</code></td><td><code>names.remove("Ann")</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">contains?</td><td><code>names.contains("Ann")</code></td><td><code>"Ann" in names</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">loop</td><td><code>for (String n : names) { }</code></td><td><code>for n in names:</code></td></tr>
+</table>
+
+<h2>Array vs ArrayList</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;"></th><th>Array</th><th>ArrayList</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Size</td><td>fixed at creation</td><td>grows / shrinks</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Read</td><td><code>arr[i]</code></td><td><code>list.get(i)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Length</td><td><code>arr.length</code></td><td><code>list.size()</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Add</td><td>— (can't)</td><td><code>list.add(x)</code></td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>Remember</h3>
+  Import it (<code>java.util</code>) · the <code>&lt;Type&gt;</code> fixes what it holds (static typing on contents) ·
+  methods not operators (<code>.add</code>/<code>.get</code>/<code>.size</code>).
+</div>
+
+<h1 style="margin-top:3rem;">HashMap</h1>
+<p><em>Key → value lookup. Python's <code>dict</code>.</em></p>
+
+<h2>Setup</h2>
+<pre><code>import java.util.HashMap;
+
+HashMap&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();   // key type, value type</code></pre>
+<p>Two types in the <code>&lt;&gt;</code>: <strong>key</strong> first, <strong>value</strong> second. Values that are numbers use <code>Integer</code> (object form of <code>int</code>) because collections hold objects.</p>
+
+<h2>Common operations</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Do</th><th>Java</th><th>Python dict</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">store</td><td><code>ages.put("Ann", 30)</code></td><td><code>ages["Ann"] = 30</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">read</td><td><code>ages.get("Ann")</code></td><td><code>ages["Ann"]</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">has key?</td><td><code>ages.containsKey("Ann")</code></td><td><code>"Ann" in ages</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">count</td><td><code>ages.size()</code></td><td><code>len(ages)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">loop keys</td><td><code>for (String k : ages.keySet())</code></td><td><code>for k in ages:</code></td></tr>
+</table>
+<p><code>put</code> with an existing key <strong>overwrites</strong>. <code>get</code> on a missing key returns <code>null</code> (not a crash, unlike Python's <code>KeyError</code>).</p>
+
+<p class="source">
+  <a href="https://dev.java/learn/api/collections-framework/lists/">dev.java — Lists</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0015-arraylist.html">← Lesson 15</a></span>
+  <span><a href="java-control-flow.html">Control-flow reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>
