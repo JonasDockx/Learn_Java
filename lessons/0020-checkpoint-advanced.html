@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 20 — Checkpoint: Advanced Review</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 20 · Checkpoint</p>
+<h1>Checkpoint: Advanced Review</h1>
+<p><em>No new material. Explain it, recall it, build with it — for Lessons 14–19.</em></p>
+
+<div class="callout callout-mission">
+  Covers exceptions, <code>ArrayList</code>, <code>HashMap</code>, generics, lambdas, and streams. Work
+  top to bottom; stop whenever you like. The goal is to find what's solid and what needs another pass.
+</div>
+
+<h2>Part 1 — Explain it yourself</h2>
+<p>Answer in the chat, in your own words. I'll tell you where each answer is sharp and where to tighten.</p>
+<ol>
+  <li>What does <code>try</code>/<code>catch</code> let a program do, and what happens to the program <em>without</em> it when an exception is thrown?</li>
+  <li>Both <code>ArrayList</code> and <code>HashMap</code> store many things. What's the difference, and when would you reach for each?</li>
+  <li>In <code>class Box&lt;T&gt;</code>, what is <code>T</code>? And why does using generics mean you don't write casts?</li>
+  <li>What is a lambda, and what must a lambda match in Java (the thing that gives it a type)?</li>
+  <li>Describe the three kinds of step in a stream pipeline, with an example of each.</li>
+</ol>
+
+<h2>Part 2 — Mixed quiz (recall)</h2>
+<p>These jump between topics on purpose.</p>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Why does <code>ArrayList</code> need <code>import java.util.ArrayList;</code>?</div>
+  <button class="opt" data-explain="Imports aren't about speed.">to make it run quicker</button>
+  <button class="opt" data-explain="java.lang is the auto-imported one, not java.util.">it's imported automatically</button>
+  <button class="opt" data-explain="Right — it lives in the java.util package.">it's in another package</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q"><code>map.get("missing")</code> for an absent key returns…</div>
+  <button class="opt" data-explain="Right — null, not an exception (unlike Python).">null, with no crash</button>
+  <button class="opt" data-explain="Java returns null rather than raising here.">a thrown KeyError</button>
+  <button class="opt" data-explain="It doesn't invent a zero.">the number zero</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">The <code>&lt;String&gt;</code> in <code>ArrayList&lt;String&gt;</code> specifies…</div>
+  <button class="opt" data-explain="Lists grow; it's not a fixed size.">the list's length</button>
+  <button class="opt" data-explain="Right — the element type it holds.">what type it holds</button>
+  <button class="opt" data-explain="It's not the variable name.">the name of the list</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">In <code>x -&gt; x + 1</code>, what is to the left of the arrow?</div>
+  <button class="opt" data-explain="The result is on the right of the arrow.">the returned value</button>
+  <button class="opt" data-explain="The interface type is inferred, not written here.">the interface name</button>
+  <button class="opt" data-explain="Right — the parameter(s).">the parameter</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">In a stream, which is a <strong>terminal</strong> operation?</div>
+  <button class="opt" data-explain="Right — toList ends the pipeline and produces a result.">toList()</button>
+  <button class="opt" data-explain="filter is intermediate; the chain continues.">filter()</button>
+  <button class="opt" data-explain="map is intermediate too.">map()</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="1">
+  <div class="q">When code in a <code>try</code> throws, the matching <code>catch</code>…</div>
+  <button class="opt" data-explain="The program keeps going — that's the point.">ends the whole program</button>
+  <button class="opt" data-explain="Right — runs instead of crashing, and execution continues.">runs, and the program continues</button>
+  <button class="opt" data-explain="It doesn't silently swallow it; your handler runs.">is skipped silently</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">(Foundations) Comparing two <code>String</code> values for equal text uses…</div>
+  <button class="opt" data-explain="== compares identity for objects.">==</button>
+  <button class="opt" data-explain="There's no 'is' comparison keyword.">the is keyword</button>
+  <button class="opt" data-explain="Right — .equals() compares the characters.">.equals()</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">(Foundations) A running stream pipeline leaves its source list…</div>
+  <button class="opt" data-explain="Right — streams don't mutate the source.">unchanged</button>
+  <button class="opt" data-explain="It isn't emptied.">emptied out</button>
+  <button class="opt" data-explain="It isn't deleted.">deleted</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Part 3 — Small project (build with it)</h2>
+<p>A <code>Gradebook</code> that combines a <code>HashMap</code>, streams, lambdas, generics, and exception handling — every piece you've practised. One file, <code>Gradebook.java</code>.</p>
+
+<h3>Step by step</h3>
+<ol>
+  <li><strong>Store grades.</strong> A <code>HashMap&lt;String, Integer&gt; grades = new HashMap&lt;&gt;();</code>. <code>put</code> in four students with scores (mix of pass/fail, pass = 60+).</li>
+  <li><strong>Count passers with a stream.</strong> <code>grades.values().stream().filter(s -&gt; s &gt;= 60).count()</code> — print it.</li>
+  <li><strong>List passers' names.</strong> <code>grades.keySet().stream().filter(name -&gt; grades.get(name) &gt;= 60).toList()</code> — print the list.</li>
+  <li><strong>Validate input with exceptions.</strong> Write <code>static void addGrade(HashMap&lt;String,Integer&gt; m, String name, int score)</code> that throws <code>IllegalArgumentException</code> if <code>score</code> is below 0 or above 100, otherwise <code>put</code>s it. Call it inside a <code>try</code>/<code>catch</code> with one bad score (e.g. <code>120</code>) and confirm the program prints the error and keeps running.</li>
+  <li><strong>Commit</strong> on a branch and merge.</li>
+</ol>
+
+<div class="callout callout-key">
+  <h3>Why this is the real test</h3>
+  If you can build this without copying from earlier files, you've integrated the Advanced track:
+  a keyed collection, generic types, two stream pipelines with lambdas, and exception handling that
+  keeps the program alive — together.
+</div>
+
+<div class="callout callout-ask">
+  Do Part 1 first and send me your answers. Then the quiz, then as much of the project as you like.
+  Stuck on a single step? Ask about that step. We don't move past the checkpoint until it's comfortable.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0019-streams.html">← Lesson 19</a></span>
+  <span><a href="../reference/java-streams.html">Reference: streams →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
