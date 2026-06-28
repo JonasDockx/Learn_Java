@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Streams</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Streams</h1>
+<p><em>Process a collection as a pipeline. Print this.</em></p>
+
+<h2>The pipeline</h2>
+<pre><code>var result = nums.stream()        // source
+    .filter(n -&gt; n % 2 == 0)       // intermediate: keep
+    .map(n -&gt; n * 10)              // intermediate: transform
+    .toList();                     // terminal: produce result</code></pre>
+
+<h2>Three kinds of step</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Step</th><th>Role</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>.stream()</code></td><td>start a pipeline from a collection</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>.filter(lambda)</code></td><td>keep items where the lambda is true</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>.map(lambda)</code></td><td>transform each item</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>.sorted()</code></td><td>(intermediate) sort the items</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>.toList()</code></td><td>(terminal) gather into a List</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>.forEach(lambda)</code></td><td>(terminal) do something with each</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>.count()</code></td><td>(terminal) how many items</td></tr>
+</table>
+<p>Intermediate ops chain and are lazy; nothing runs until a <strong>terminal</strong> op. The source collection is never modified.</p>
+
+<h2>Python comparison</h2>
+<pre><code># comprehension
+[n*10 for n in nums if n % 2 == 0]
+
+// stream
+nums.stream().filter(n -&gt; n%2==0).map(n -&gt; n*10).toList()</code></pre>
+
+<div class="callout callout-key">
+  <h3>Remember</h3>
+  Source → keep (<code>filter</code>) → transform (<code>map</code>) → gather (<code>toList</code>/<code>forEach</code>).
+  Every <code>filter</code>/<code>map</code> takes a <strong>lambda</strong>. The original list stays unchanged.
+</div>
+
+<p class="source">
+  <a href="https://dev.java/learn/api/streams/">dev.java — Streams</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0019-streams.html">← Lesson 19</a></span>
+  <span><a href="java-lambdas.html">Lambdas reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

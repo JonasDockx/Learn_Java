@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 19 — Streams</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 19 · Advanced</p>
+<h1>Streams</h1>
+<p><em>One idea: process a collection as a pipeline — filter, transform, collect.</em></p>
+
+<div class="callout callout-mission">
+  This is where lambdas earn their keep. A <strong>stream</strong> lets you take a list, keep the items
+  you want, transform them, and gather the result — as a readable chain instead of a manual loop. It's
+  the Java answer to Python's list comprehensions, and it's all over modern codebases.
+</div>
+
+<h2>The shape: source → operations → result</h2>
+<pre><code>var result = nums.stream()          // 1. start a pipeline from the list
+    .filter(n -&gt; n % 2 == 0)         // 2. keep only evens     (a lambda)
+    .map(n -&gt; n * 10)                // 3. transform each       (a lambda)
+    .toList();                       // 4. gather into a new list</code></pre>
+
+<p>Three kinds of step:</p>
+<ul>
+  <li><strong><code>stream()</code></strong> — turns the collection into a pipeline.</li>
+  <li><strong>Intermediate ops</strong> (<code>filter</code>, <code>map</code>) — each takes a lambda and returns a new stream, so they chain. <code>filter</code> keeps items; <code>map</code> transforms them.</li>
+  <li><strong>Terminal op</strong> (<code>toList</code>, <code>forEach</code>) — ends the pipeline and produces the result. Nothing runs until a terminal op is reached.</li>
+</ul>
+
+<h2>The Python comparison</h2>
+<pre><code># Python list comprehension
+result = [n * 10 for n in nums if n % 2 == 0]
+
+// Java stream
+var result = nums.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .map(n -&gt; n * 10)
+    .toList();</code></pre>
+<p>Same three ideas — source, a condition to keep (<code>if</code> / <code>filter</code>), a transform (<code>n*10</code> / <code>map</code>). Python packs it in one expression; Java spells each step as a named link in a chain.</p>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  Each <code>filter</code>/<code>map</code> takes a <strong>lambda</strong> — exactly the
+  <code>x -&gt; ...</code> from Lesson 18. A stream is just a sequence of lambdas applied to a collection.
+  And it <strong>does not change the original list</strong> — it produces a new result, leaving
+  <code>nums</code> untouched.
+</div>
+
+<h2>The whole thing in one file</h2>
+<pre><code>import java.util.ArrayList;
+
+public class StreamIntro {
+    public static void main(String[] args) {
+        ArrayList&lt;Integer&gt; nums = new ArrayList&lt;&gt;();
+        nums.add(1); nums.add(2); nums.add(3); nums.add(4);
+
+        var result = nums.stream()
+            .filter(n -&gt; n % 2 == 0)     // 2, 4
+            .map(n -&gt; n * 10)            // 20, 40
+            .toList();
+
+        System.out.println(result);      // [20, 40]
+        System.out.println(nums);        // [1, 2, 3, 4] — unchanged
+
+        // A terminal op that acts instead of collecting:
+        nums.stream()
+            .filter(n -&gt; n &gt; 2)
+            .forEach(n -&gt; System.out.println("big: " + n));   // big: 3, big: 4
+    }
+}</code></pre>
+<p><code>%</code> is the remainder operator: <code>n % 2 == 0</code> means "evenly divisible by 2" — even.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">What does <code>filter(n -&gt; n &gt; 2)</code> do in a stream?</div>
+  <button class="opt" data-explain="Transforming each is map, not filter.">multiplies each item by 2</button>
+  <button class="opt" data-explain="Right — keeps only items where the lambda is true.">keeps items where n &gt; 2</button>
+  <button class="opt" data-explain="filter doesn't sum; that's a different operation.">adds the items together</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Which step actually produces a result and ends the pipeline?</div>
+  <button class="opt" data-explain="filter is intermediate; the chain continues.">the filter step</button>
+  <button class="opt" data-explain="map is intermediate too.">the map step</button>
+  <button class="opt" data-explain="Right — toList (a terminal op) ends it.">the toList step</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">After a stream pipeline runs, the original list is…</div>
+  <button class="opt" data-explain="Right — streams don't mutate the source.">unchanged</button>
+  <button class="opt" data-explain="It isn't emptied by streaming.">left empty</button>
+  <button class="opt" data-explain="The source isn't deleted.">deleted entirely</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>Create <code>StreamIntro.java</code> with the code above. Compile and run — confirm <code>[20, 40]</code>, the unchanged <code>[1, 2, 3, 4]</code>, and the two "big" lines.</li>
+  <li>Change the <code>filter</code> to keep odds (<code>n % 2 == 1</code>) and the <code>map</code> to <code>n + 100</code>. Predict the output before running.</li>
+  <li>Add a <code>map(n -&gt; "#" + n)</code> step and collect to a list of Strings — confirm the type flows through (numbers become Strings).</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/api/streams/">dev.java — Streams</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. More stream operations exist (<code>sorted</code>, <code>count</code>,
+  <code>reduce</code>, <code>collect(Collectors...)</code>) — we'll add them as needed. You've now
+  covered the Advanced track's language features: exceptions, collections, generics, lambdas, streams.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0018-functional-interfaces-lambdas.html">← Lesson 18</a></span>
+  <span><a href="../reference/java-streams.html">Reference: streams →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
