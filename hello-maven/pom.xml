@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Every Maven project starts with this. It identifies the project. -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.jonas</groupId>      <!-- who owns it (like a package prefix) -->
+    <artifactId>hello-maven</artifactId> <!-- the project's name -->
+    <version>1.0</version>            <!-- this project's version -->
+
+    <properties>
+        <!-- compile against Java 21, use UTF-8 -->
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- Dependencies = external libraries Maven downloads for you. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>  <!-- JUnit 5, the test framework -->
+            <version>5.10.2</version>
+            <scope>test</scope>   <!-- only needed for tests, not the real app -->
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Surefire is the plugin that runs your tests during `mvn test`. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
