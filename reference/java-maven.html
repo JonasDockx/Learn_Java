@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Maven</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Maven</h1>
+<p><em>Project layout, pom.xml, and the commands. Print this.</em></p>
+
+<h2>Standard layout</h2>
+<pre><code>my-project/
+├── pom.xml              configuration
+├── src/main/java/       production code
+├── src/test/java/       test code
+└── target/              build output (gitignored)</code></pre>
+
+<h2>pom.xml essentials</h2>
+<pre><code>&lt;groupId&gt;com.jonas&lt;/groupId&gt;        who owns it
+&lt;artifactId&gt;hello-maven&lt;/artifactId&gt; project name
+&lt;version&gt;1.0&lt;/version&gt;               project version
+
+&lt;dependencies&gt;                       libraries Maven downloads
+  &lt;dependency&gt;
+    &lt;groupId&gt;...&lt;/groupId&gt;
+    &lt;artifactId&gt;...&lt;/artifactId&gt;
+    &lt;version&gt;...&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;              (optional) only for tests
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+<p>A dependency's <code>groupId:artifactId:version</code> are its <strong>coordinates</strong> — its unique address in the Maven Central repository.</p>
+
+<h2>Commands</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Command</th><th>Does</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn compile</code></td><td>compile main code</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn test</code></td><td>compile + run tests</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn package</code></td><td>build a .jar into target/</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn clean</code></td><td>delete target/</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn clean test</code></td><td>fresh build, then test</td></tr>
+</table>
+<p>Run from the folder containing <code>pom.xml</code>. Downloaded libraries cache in <code>~/.m2/</code>.</p>
+
+<div class="callout callout-key">
+  <h3>Reading the result</h3>
+  <pre><code>Tests run: 1, Failures: 0, Errors: 0   → all good
+BUILD SUCCESS                          → compiled + tests passed
+BUILD FAILURE                          → something broke (read upward)</code></pre>
+</div>
+
+<h2>Python comparison</h2>
+<p>Maven ≈ <code>pip</code> + a project/build standard. <code>pom.xml</code> ≈ <code>requirements.txt</code> + <code>pyproject.toml</code>, but Maven also fixes the folder layout and runs the build/test lifecycle.</p>
+
+<p class="source">
+  <a href="https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html">Maven in 5 Minutes</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0022-first-maven-project.html">← Lesson 22</a></span>
+  <span><a href="git-basics.html">Git reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

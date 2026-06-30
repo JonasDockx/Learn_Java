@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Clean Code</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Clean Code</h1>
+<p><em>Habits that make code readable. Print this.</em></p>
+
+<h2>The three highest-impact habits</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Habit</th><th>Do</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Intention-revealing names</td><td><code>applyDiscount(price, percent)</code>, not <code>c(p, d)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">No magic numbers</td><td><code>MINIMUM_AGE</code>, not a bare <code>18</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Small, single-purpose methods</td><td>one method = one sentence</td></tr>
+</table>
+
+<h2>Constants with <code>final</code></h2>
+<pre><code>private static final int MINIMUM_AGE = 18;   // can't be reassigned</code></pre>
+<p><code>final</code> = unchangeable. <code>static final</code> = one shared constant for the class. Named in <code>UPPER_SNAKE_CASE</code>.</p>
+
+<h2>Java naming conventions</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Thing</th><th>Style</th><th>Example</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">class</td><td>PascalCase</td><td><code>Calculator</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">method / variable</td><td>camelCase</td><td><code>applyDiscount</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">constant</td><td>UPPER_SNAKE_CASE</td><td><code>MINIMUM_AGE</code></td></tr>
+</table>
+
+<h2>Comments</h2>
+<p>Good code rarely needs comments to explain <em>what</em>. Comment the <em>why</em> — a non-obvious decision or workaround. A comment restating the code is noise; a clear name is better.</p>
+
+<div class="callout callout-key">
+  <h3>The mindset</h3>
+  Optimise for the reader, not the writer. You will read this code far more often than you wrote it.
+  Refactoring (Lesson 24) is how you move messy code toward clean — safely, with tests green.
+</div>
+
+<p class="source">
+  <a href="https://www.oreilly.com/library/view/clean-code-a/9780136083238/">_Clean Code_ — Robert C. Martin</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0025-clean-code.html">← Lesson 25</a></span>
+  <span><a href="java-tdd-junit.html">TDD reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

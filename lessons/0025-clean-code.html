@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 25 — Clean Code</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 25 · eXtreme Programming</p>
+<h1>Clean Code</h1>
+<p><em>One idea: write for the human who reads it next — usually you, in three months.</em></p>
+
+<div class="callout callout-mission">
+  Code is read far more often than it's written. "Clean code" is code optimised for the reader, and on a
+  team it's the difference between a change taking five minutes or an afternoon. There's no compiler check
+  for it — it's judgment. Here are the three highest-impact habits.
+</div>
+
+<h2>Habit 1 — Intention-revealing names</h2>
+<p>A name should say <em>what</em> and <em>why</em>, so the reader doesn't have to decode the logic.</p>
+<pre><code>// unclear
+public double c(double p, int d) {
+    return p - (p * d / 100.0);
+}
+
+// clean — the names tell the story
+public double applyDiscount(double price, int discountPercent) {
+    return price - (price * discountPercent / 100.0);
+}</code></pre>
+<p>Same code, but the second version explains itself. Naming is the cheapest, highest-impact clean-code habit.</p>
+
+<h2>Habit 2 — No magic numbers</h2>
+<p>A bare number in the middle of logic (a "magic number") hides its meaning. Give it a named constant.</p>
+<pre><code>// magic number — what is 18?
+if (age &gt;= 18) { allowEntry(); }
+
+// named — the meaning is explicit
+private static final int MINIMUM_AGE = 18;   // a constant
+if (age &gt;= MINIMUM_AGE) { allowEntry(); }</code></pre>
+<div class="callout callout-key">
+  <h3>New keyword: <code>final</code></h3>
+  <code>final</code> means the value <strong>can't be reassigned</strong> — it's a constant. Convention:
+  constants are named in <code>UPPER_SNAKE_CASE</code>. <code>static final</code> together = "one shared,
+  unchangeable value for the whole class". Naming the number also means you change it in <em>one</em> place.
+</div>
+
+<h2>Habit 3 — Small functions that do one thing</h2>
+<p>If a method does several things, split it. Each method should be describable in one short sentence — and its name should be that sentence.</p>
+<pre><code>// does two things: validates AND saves
+void register(User u) {
+    if (u.getEmail() == null) throw new IllegalArgumentException("no email");
+    if (u.getAge() &lt; 18)      throw new IllegalArgumentException("too young");
+    database.save(u);
+}
+
+// split: each method does one thing, names say what
+void register(User u) {
+    validate(u);
+    database.save(u);
+}
+private void validate(User u) {
+    if (u.getEmail() == null) throw new IllegalArgumentException("no email");
+    if (u.getAge() &lt; 18)      throw new IllegalArgumentException("too young");
+}</code></pre>
+
+<h2>A note on comments</h2>
+<p>Prefer code that doesn't need a comment to explain <em>what</em> it does — a good name beats a comment. Reserve comments for <em>why</em> (a non-obvious decision, a workaround). A comment that just restates the code is noise.</p>
+<p><em>Python comparison:</em> same culture as PEP 8 / "readability counts". The Java conventions differ in spelling — <code>camelCase</code> for methods/variables, <code>UPPER_SNAKE_CASE</code> for constants, <code>PascalCase</code> for classes.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">Clean code is primarily optimised for…</div>
+  <button class="opt" data-explain="Cleverness/brevity isn't the goal; clarity is.">the shortest possible code</button>
+  <button class="opt" data-explain="Right — the next human to read it.">the human who reads it next</button>
+  <button class="opt" data-explain="Speed is a separate concern from cleanliness.">the fastest execution</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Why replace a bare <code>18</code> with <code>MINIMUM_AGE</code>?</div>
+  <button class="opt" data-explain="It doesn't change speed.">to run faster</button>
+  <button class="opt" data-explain="It doesn't use less memory meaningfully.">to save memory</button>
+  <button class="opt" data-explain="Right — the name shows meaning, and it's set in one place.">to make its meaning explicit</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">A good comment explains…</div>
+  <button class="opt" data-explain="Right — why; the code already shows what.">why, not what</button>
+  <button class="opt" data-explain="Restating what the code does is noise.">what each line does</button>
+  <button class="opt" data-explain="Comments aren't for hiding code.">how to delete the code</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (rewrite, then send it to me)</h2>
+<p>Here's a deliberately unclear method. Rewrite it clean — better names, a named constant for the magic number — and paste your version in the chat. I'll review it.</p>
+<pre><code>public double calc(double s, int h) {
+    return s + (s * h / 100.0);   // h is a tax rate as a percentage
+}</code></pre>
+<p>Hints: what does this actually compute? What should <code>s</code>, <code>h</code>, and the method be called? Should <code>100</code> be named?</p>
+
+<p class="source">
+  <a href="https://www.oreilly.com/library/view/clean-code-a/9780136083238/">_Clean Code_ — Robert C. Martin</a>, the standard reference (names, functions, comments).
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. Clean code is judgment that grows with practice — code review (a teammate reading
+  your code) is where it sharpens fastest. Next in this block: <strong>CI/CD</strong> — automating the
+  build + tests so every change is checked the moment it's pushed.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0024-refactoring.html">← Lesson 24</a></span>
+  <span><a href="../reference/java-clean-code.html">Reference: clean code →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

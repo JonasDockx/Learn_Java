@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 23 — TDD with JUnit</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 23 · eXtreme Programming</p>
+<h1>TDD with JUnit</h1>
+<p><em>One idea: write the test first, watch it fail, then write just enough code to make it pass.</em></p>
+
+<div class="callout callout-mission">
+  Test-Driven Development is a headline skill on your syllabus and a daily habit on real Java teams.
+  The flip feels backwards at first — test before code — but it forces you to decide what "correct"
+  means before you build, and leaves you a safety net forever after. You'll do it in
+  <code>hello-maven</code>.
+</div>
+
+<h2>The loop: Red → Green → Refactor</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Step</th><th>Do</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>Red</strong></td><td>Write a test for behaviour that doesn't exist yet. Run it — it fails (red).</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>Green</strong></td><td>Write the simplest code that makes the test pass. Run it — it passes (green).</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>Refactor</strong></td><td>Clean up the code now that it works. Re-run tests — still green, so you didn't break anything.</td></tr>
+</table>
+<p>Then repeat for the next small piece of behaviour. Small loops, always green before moving on.</p>
+
+<h2>JUnit essentials</h2>
+<pre><code>import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CalculatorTest {
+    @Test                                  // marks a test method
+    void addsTwoNumbers() {
+        Calculator calc = new Calculator();
+        assertEquals(5, calc.add(2, 3));   // assertEquals(expected, actual)
+    }
+}</code></pre>
+<p>The key assertions (the checks that make a test pass or fail):</p>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Assertion</th><th>Passes when</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>assertEquals(exp, act)</code></td><td><code>act</code> equals <code>exp</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>assertTrue(cond)</code></td><td><code>cond</code> is true</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>assertThrows(E.class, () -&gt; ...)</code></td><td>the code throws <code>E</code></td></tr>
+</table>
+<p><em>Python comparison:</em> JUnit's <code>@Test void foo()</code> + <code>assertEquals</code> is pytest's <code>def test_foo(): assert ...</code>; <code>assertThrows</code> is <code>pytest.raises</code>.</p>
+
+<h2>A full cycle, worked: add <code>subtract</code></h2>
+<p><strong>① Red</strong> — add this test to <code>CalculatorTest.java</code> (the method doesn't exist yet):</p>
+<pre><code>@Test
+void subtractsTwoNumbers() {
+    Calculator calc = new Calculator();
+    assertEquals(2, calc.subtract(5, 3));
+}</code></pre>
+<p>Run <code>mvn test</code> → it <strong>fails to compile</strong> ("cannot find symbol: method subtract"). That's red — the test is demanding behaviour that isn't there.</p>
+
+<p><strong>② Green</strong> — add the method to <code>Calculator.java</code>:</p>
+<pre><code>public int subtract(int a, int b) {
+    return a - b;
+}</code></pre>
+<p>Run <code>mvn test</code> → green. <code>Tests run: 2, Failures: 0</code>.</p>
+
+<p><strong>③ Refactor</strong> — look at the code; if it could be cleaner, tidy it now, knowing the tests will catch any mistake. (Here it's already minimal, so nothing to do — but the <em>habit</em> of pausing to clean up is the point.)</p>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  The test came <strong>first</strong>, and its failure <em>drove</em> the code you wrote. You never
+  write production code without a failing test asking for it. The payoff compounds: every cycle adds a
+  permanent check, so you can change code later and instantly know if you broke something.
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">In TDD, what do you write first?</div>
+  <button class="opt" data-explain="Code comes after the failing test in TDD.">the production code</button>
+  <button class="opt" data-explain="Right — a failing test for the behaviour you want.">a failing test</button>
+  <button class="opt" data-explain="Docs aren't the TDD trigger.">the documentation</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">"Green" in the loop means…</div>
+  <button class="opt" data-explain="That's the red step.">the test is failing</button>
+  <button class="opt" data-explain="Refactor is a separate, later step.">the code is refactored</button>
+  <button class="opt" data-explain="Right — the test now passes.">the test passes</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q"><code>assertEquals(5, calc.add(2, 3))</code> — which is the expected value?</div>
+  <button class="opt" data-explain="Right — expected comes first, then actual.">5</button>
+  <button class="opt" data-explain="That's the actual value, second.">calc.add(2, 3)</button>
+  <button class="opt" data-explain="add is the method under test, not the expectation.">add</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (in hello-maven, the TDD loop yourself)</h2>
+<ol>
+  <li><strong>Red:</strong> in <code>CalculatorTest.java</code>, add a test for a <code>multiply</code> method that doesn't exist yet: <code>assertEquals(12, calc.multiply(3, 4));</code>. Run <code>mvn test</code> — confirm it fails.</li>
+  <li><strong>Green:</strong> add <code>multiply</code> to <code>Calculator.java</code>. Run <code>mvn test</code> — confirm all tests pass.</li>
+  <li><strong>Refactor:</strong> nothing needed — just re-read your code and note it's clean. The habit matters more than the edit.</li>
+  <li><strong>Stretch (assertThrows):</strong> write a test that <code>calc.divide(1, 0)</code> throws: <code>assertThrows(ArithmeticException.class, () -&gt; calc.divide(1, 0));</code>. Watch it fail, then add a <code>divide</code> method that throws an <code>ArithmeticException</code> when <code>b == 0</code>. Green again.</li>
+</ol>
+
+<p class="source">
+  <a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests">JUnit 5 — Writing Tests</a>. Official reference.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. The "Refactor" step links to the next topics on your syllabus — <strong>refactoring
+  and clean code</strong> — which are exactly "improve the code while the tests keep it safe." TDD is the
+  engine those run on.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0022-first-maven-project.html">← Lesson 22</a></span>
+  <span><a href="../reference/java-tdd-junit.html">Reference: TDD &amp; JUnit →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

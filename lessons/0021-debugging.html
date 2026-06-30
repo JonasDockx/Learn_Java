@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 21 — Debugging</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 21 · Advanced</p>
+<h1>Debugging</h1>
+<p><em>One skill: read the crash, find the line, inspect the value, fix it.</em></p>
+
+<div class="callout callout-mission">
+  Bugs are the job. The difference between a stuck junior and a productive one isn't avoiding bugs —
+  it's a calm, repeatable way to find them. You'll practise that loop on a real, common crash: the
+  <code>NullPointerException</code>.
+</div>
+
+<h2>The loop</h2>
+<ol>
+  <li><strong>Reproduce</strong> — run it, get the error.</li>
+  <li><strong>Read the stack trace</strong> — the top line + message say <em>where</em> and <em>what</em>.</li>
+  <li><strong>Inspect</strong> — print the suspicious values to see what's actually there.</li>
+  <li><strong>Fix and verify</strong> — change one thing, run again.</li>
+</ol>
+
+<h2>A bug to hunt</h2>
+<p>Put this in <code>BugHunt.java</code> and run it:</p>
+<pre><code>import java.util.HashMap;
+
+public class BugHunt {
+    public static void main(String[] args) {
+        HashMap&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();
+        ages.put("Ann", 30);
+
+        String name = "Bob";              // not in the map
+        int age = ages.get(name);         // ← crashes here
+        System.out.println(name + " is " + age);
+    }
+}</code></pre>
+
+<p>It throws something like:</p>
+<pre><code>Exception in thread "main" java.lang.NullPointerException:
+  Cannot invoke "java.lang.Integer.intValue()" because the return value of
+  "java.util.HashMap.get(Object)" is null
+        at BugHunt.main(BugHunt.java:9)</code></pre>
+
+<h2>Read it</h2>
+<ul>
+  <li><strong>What:</strong> <code>NullPointerException</code> — code tried to use something that was <code>null</code> (the "arrow pointing at nothing" from Lesson 4).</li>
+  <li><strong>Where:</strong> <code>BugHunt.java:9</code> — the <code>int age = ages.get(name);</code> line.</li>
+  <li><strong>Why (the message spells it out):</strong> <code>HashMap.get(...)</code> returned <code>null</code> (no "Bob" key — the Lesson 16 gotcha), and Java can't turn <code>null</code> into an <code>int</code>.</li>
+</ul>
+<p>Modern Java's "helpful NullPointerException" names the exact thing that was null — read that message; it's doing half your work.</p>
+
+<h2>Inspect with a print</h2>
+<p>When the cause isn't obvious, print the suspect <em>before</em> the crashing line:</p>
+<pre><code>System.out.println("got from map: " + ages.get(name));   // prints: got from map: null
+int age = ages.get(name);</code></pre>
+<p>Seeing <code>null</code> confirms it. (Note: store it as <code>Integer</code> to print without crashing — converting to <code>int</code> is what fails.)</p>
+
+<div class="callout callout-key">
+  <h3>The fix — guard the null</h3>
+  Don't assume the key exists. Two clean options:
+  <pre><code>// Option A: a default value
+int age = ages.getOrDefault(name, 0);     // 0 if absent — no crash
+
+// Option B: check first
+if (ages.containsKey(name)) {
+    int age = ages.get(name);
+    System.out.println(name + " is " + age);
+} else {
+    System.out.println(name + " not found");
+}</code></pre>
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">A <code>NullPointerException</code> means the code…</div>
+  <button class="opt" data-explain="It's not about types mismatching at compile time.">mixed up two types</button>
+  <button class="opt" data-explain="Right — used something that was null.">used a null value</button>
+  <button class="opt" data-explain="That's an ArrayIndexOutOfBounds, a different error.">went past an array's end</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">In a stack trace, where is the crash in <em>your</em> code?</div>
+  <button class="opt" data-explain="The message says what, not the line in your file.">in the exception message</button>
+  <button class="opt" data-explain="The bottom is often library/startup code.">always the bottom line</button>
+  <button class="opt" data-explain="Right — the first line naming your file and a line number.">the top line with your file</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">What does <code>ages.getOrDefault("Bob", 0)</code> do?</div>
+  <button class="opt" data-explain="Right — returns 0 when the key is absent, no crash.">returns 0 if "Bob" is missing</button>
+  <button class="opt" data-explain="It doesn't insert anything into the map.">adds Bob with age 0</button>
+  <button class="opt" data-explain="It returns a value rather than throwing.">throws if "Bob" is missing</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (one file, small steps)</h2>
+<ol>
+  <li>Create <code>BugHunt.java</code> above and run it. Read the <code>NullPointerException</code> — find the line number and the "is null" message.</li>
+  <li>Add the inspect print (storing the result as <code>Integer</code>) and confirm it shows <code>null</code>.</li>
+  <li>Fix it with <code>getOrDefault(name, 0)</code>, run, and confirm it prints <code>Bob is 0</code> with no crash.</li>
+  <li>Change <code>name</code> to <code>"Ann"</code> and confirm it prints <code>Ann is 30</code>.</li>
+</ol>
+
+<p class="source">
+  <a href="https://dev.java/learn/debugging/">dev.java — Debugging</a>, and your
+  <a href="../reference/java-exceptions.html">exceptions reference</a> for reading stack traces.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. A bigger tool exists — the <strong>debugger</strong> (set a breakpoint, pause,
+  step line by line, inspect every variable) — built into VS Code's Java extension. We can set that up
+  when you want; print-debugging is enough to start. This rounds out the Advanced track.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0020-checkpoint-advanced.html">← Lesson 20</a></span>
+  <span><a href="../reference/java-debugging.html">Reference: debugging →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

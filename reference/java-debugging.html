@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Debugging</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Debugging</h1>
+<p><em>Find a bug calmly and repeatably. Print this.</em></p>
+
+<h2>The loop</h2>
+<ol>
+  <li><strong>Reproduce</strong> — run it; get the failure reliably.</li>
+  <li><strong>Read the stack trace</strong> — top line in your file = where; exception + message = what.</li>
+  <li><strong>Inspect</strong> — print suspect values just before the failing line.</li>
+  <li><strong>Fix &amp; verify</strong> — change one thing; run again.</li>
+</ol>
+
+<h2>Reading a stack trace</h2>
+<pre><code>Exception ... NullPointerException: ... is null
+    at BugHunt.main(BugHunt.java:9)   ← top with YOUR file = the spot
+</code></pre>
+<p>Scan for the first line naming your <code>.java</code> file. The message says what went wrong.</p>
+
+<h2>Common exceptions</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Exception</th><th>Usually means</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>NullPointerException</code></td><td>used something that was <code>null</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>ArrayIndexOutOfBoundsException</code></td><td>index past the array/list end</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>NumberFormatException</code></td><td><code>Integer.parseInt("abc")</code> — not a number</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>ClassCastException</code></td><td>a bad cast (Lesson 17)</td></tr>
+</table>
+
+<h2>Print debugging</h2>
+<pre><code>System.out.println("here, x = " + x);   // confirm what x really is
+</code></pre>
+<p>Cheap, always available. Print the suspect value just before the crash to confirm your theory.</p>
+
+<div class="callout callout-key">
+  <h3>Null safety with maps</h3>
+  <pre><code>map.getOrDefault(key, fallback)   // value or fallback — no null
+if (map.containsKey(key)) { ... } // check before get</code></pre>
+</div>
+
+<h2>Next level: the debugger</h2>
+<p>VS Code's Java extension: set a <strong>breakpoint</strong> (click the gutter), run in debug mode, and the program pauses there so you can step line by line and inspect every variable. More powerful than prints once a bug is subtle.</p>
+
+<p class="source">
+  <a href="https://dev.java/learn/debugging/">dev.java — Debugging</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0021-debugging.html">← Lesson 21</a></span>
+  <span><a href="java-exceptions.html">Exceptions reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

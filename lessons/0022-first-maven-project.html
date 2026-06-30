@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 22 — Your First Maven Project</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 22 · Enterprise · Build Tools</p>
+<h1>Your First Maven Project</h1>
+<p><em>One idea: a standard folder layout + a <code>pom.xml</code>, and Maven builds, tests, and manages libraries for you.</em></p>
+
+<div class="callout callout-mission">
+  Until now: <code>javac OneFile.java</code> by hand. That doesn't scale to many files and external
+  libraries. <strong>Maven</strong> is the tool that does: it knows where your code lives, downloads the
+  libraries you declare, compiles, and runs your tests — with one command. I've scaffolded a working
+  project at <code>hello-maven/</code> for you to explore.
+</div>
+
+<div class="callout callout-key">
+  <h3>First: open a new terminal</h3>
+  Maven was just added to your PATH, so a terminal opened <em>before</em> the install won't see it.
+  Open a fresh one (in VS Code: trash the current terminal, open a new one), then
+  <code>cd hello-maven</code>. Check it with <code>mvn -version</code>.
+</div>
+
+<h2>The standard layout</h2>
+<p>Every Maven project has the same shape. That predictability is the point — any Java developer can open any Maven project and know where things are:</p>
+<pre><code>hello-maven/
+├── pom.xml                         ← the project's configuration
+├── src/
+│   ├── main/java/                  ← your real code
+│   │   └── Calculator.java
+│   └── test/java/                  ← your tests (mirrors main/)
+│       └── CalculatorTest.java
+└── target/                         ← build output (auto-generated, gitignored)</code></pre>
+<ul>
+  <li><strong><code>src/main/java</code></strong> — production code. <code>Calculator.java</code> lives here.</li>
+  <li><strong><code>src/test/java</code></strong> — test code, kept separate from the app. <code>CalculatorTest.java</code> lives here.</li>
+  <li><strong><code>target/</code></strong> — where Maven puts compiled classes and packaged jars. Never edit it; never commit it.</li>
+</ul>
+
+<h2>The <code>pom.xml</code> — the project's brain</h2>
+<p>Open <a href="../hello-maven/pom.xml">hello-maven/pom.xml</a>. The parts that matter today:</p>
+<ul>
+  <li><strong>Coordinates</strong> (<code>groupId</code>, <code>artifactId</code>, <code>version</code>) — the project's unique name, like a package + project + version.</li>
+  <li><strong><code>&lt;dependencies&gt;</code></strong> — external libraries you want. We declared <strong>JUnit</strong> (the test framework). Maven downloads it for you — no manual jar hunting.</li>
+  <li><strong><code>&lt;build&gt;&lt;plugins&gt;</code></strong> — tools that run during the build; here, the one that runs tests.</li>
+</ul>
+<p>You <em>declare what you need</em>; Maven fetches it (into a local cache at <code>~/.m2</code>) and wires it up. That's "dependency management".</p>
+
+<h2>The commands you'll use</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Command</th><th>Does</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn compile</code></td><td>compile <code>src/main/java</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn test</code></td><td>compile everything and run the tests</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn package</code></td><td>build a runnable <code>.jar</code> in <code>target/</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>mvn clean</code></td><td>delete <code>target/</code> (the clean build you met in Lesson 11)</td></tr>
+</table>
+<p>Run them from the project folder (the one containing <code>pom.xml</code>).</p>
+
+<div class="callout callout-key">
+  <h3>What a passing run looks like</h3>
+  <pre><code>[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS</code></pre>
+  <code>BUILD SUCCESS</code> with zero failures = everything compiled and every test passed.
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">Where does production code go in a Maven project?</div>
+  <button class="opt" data-explain="That's for tests, not production code.">src/test/java</button>
+  <button class="opt" data-explain="Right — production code lives under src/main/java.">src/main/java</button>
+  <button class="opt" data-explain="target/ is generated output, not your source.">the target folder</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">What does declaring a <code>&lt;dependency&gt;</code> in <code>pom.xml</code> do?</div>
+  <button class="opt" data-explain="It doesn't write code for you.">writes the library's code</button>
+  <button class="opt" data-explain="Dependencies aren't tests themselves.">runs your tests</button>
+  <button class="opt" data-explain="Right — Maven downloads that library for you.">downloads that library</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">Which command compiles and runs the tests?</div>
+  <button class="opt" data-explain="Right — mvn test compiles then runs tests.">mvn test</button>
+  <button class="opt" data-explain="clean deletes target/; it doesn't test.">mvn clean</button>
+  <button class="opt" data-explain="That's not a Maven lifecycle command.">mvn run</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (in the new terminal, inside hello-maven/)</h2>
+<ol>
+  <li><code>mvn test</code> — confirm <code>Tests run: 1, Failures: 0</code> and <code>BUILD SUCCESS</code>.</li>
+  <li><strong>Make the test fail on purpose:</strong> open <code>src/main/java/Calculator.java</code> and change <code>a + b</code> to <code>a - b</code>. Run <code>mvn test</code> again — watch it report a <strong>failure</strong> (expected 5, but was -1) and <code>BUILD FAILURE</code>. This is a test catching a bug.</li>
+  <li>Change it back to <code>a + b</code> and confirm it passes again.</li>
+  <li>Run <code>mvn clean</code>, look at how <code>target/</code> disappears, then <code>mvn test</code> rebuilds it.</li>
+</ol>
+
+<p class="source">
+  <a href="https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html">Maven in 5 Minutes</a> — official quick intro.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything — XML feels verbose at first; that's normal. The <em>next</em> lesson is the payoff:
+  <strong>JUnit and TDD</strong> — writing tests first, the red-green-refactor loop. Today was just the
+  project and the commands; next we live inside <code>src/test/java</code>.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0021-debugging.html">← Lesson 21</a></span>
+  <span><a href="../reference/java-maven.html">Reference: Maven →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

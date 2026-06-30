@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — CI/CD</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>CI/CD</h1>
+<p><em>Automated build + test on every push. Print this.</em></p>
+
+<h2>The terms</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Term</th><th>Means</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>CI</strong> (Continuous Integration)</td><td>auto build + test on every push</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>CD</strong> (Continuous Delivery/Deployment)</td><td>auto package + ship after tests pass</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Workflow</td><td>the YAML file describing the steps</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Runner</td><td>the machine GitHub runs it on</td></tr>
+</table>
+
+<h2>Minimal GitHub Actions workflow (Java + Maven)</h2>
+<pre><code># .github/workflows/ci.yml
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: mvn -B test
+        working-directory: hello-maven</code></pre>
+
+<h2>The mental model</h2>
+<pre><code>push  →  GitHub spins up a fresh machine  →
+  checkout code  →  install Java  →  mvn test  →  green ✓ or red ✗</code></pre>
+<p>It's your local steps, automated and run for everyone on every change.</p>
+
+<div class="callout callout-key">
+  <h3>YAML</h3>
+  Indentation-based config (like Python — spaces, not braces). Keys end in <code>:</code>; nesting is by
+  indentation. A misaligned space breaks it — check indentation first when a workflow won't parse.
+</div>
+
+<h2>Where it lives</h2>
+<p>Repo root: <code>.github/workflows/*.yml</code>. Results appear under the repo's <strong>Actions</strong> tab. Red X = a step failed (usually a test); click in to read the log.</p>
+
+<p class="source">
+  <a href="https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven">GitHub Docs — Java with Maven</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0026-ci-cd.html">← Lesson 26</a></span>
+  <span><a href="git-branching.html">Git reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

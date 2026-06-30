@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — TDD &amp; JUnit</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>TDD &amp; JUnit</h1>
+<p><em>The red-green-refactor loop and JUnit basics. Print this.</em></p>
+
+<h2>The loop</h2>
+<pre><code>RED      write a failing test for new behaviour
+GREEN    write the simplest code to pass it
+REFACTOR clean the code; tests stay green
+↻        repeat for the next small behaviour</code></pre>
+<p>Never write production code without a failing test asking for it. Always green before moving on.</p>
+
+<h2>A JUnit test</h2>
+<pre><code>import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CalculatorTest {
+    @Test
+    void addsTwoNumbers() {
+        Calculator calc = new Calculator();
+        assertEquals(5, calc.add(2, 3));   // (expected, actual)
+    }
+}</code></pre>
+<ul>
+  <li><code>@Test</code> — marks a method as a test.</li>
+  <li>Test classes live in <code>src/test/java</code>; run with <code>mvn test</code>.</li>
+</ul>
+
+<h2>Common assertions</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Assertion</th><th>Passes when</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>assertEquals(exp, act)</code></td><td>values are equal</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>assertTrue(c)</code> / <code>assertFalse(c)</code></td><td>condition is true / false</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>assertNull(x)</code> / <code>assertNotNull(x)</code></td><td>x is null / not null</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>assertThrows(E.class, () -&gt; ...)</code></td><td>the lambda throws E</td></tr>
+</table>
+
+<div class="callout callout-key">
+  <h3>Reading results</h3>
+  <pre><code>Tests run: 2, Failures: 0   → all green
+Tests run: 2, Failures: 1   → one assertion failed (read which)</code></pre>
+  A failure message shows <code>expected: &lt;5&gt; but was: &lt;-1&gt;</code> — exactly what went wrong.
+</div>
+
+<h2>Python comparison</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">pytest</th><th>JUnit</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>def test_add():</code></td><td><code>@Test void add()</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>assert x == 5</code></td><td><code>assertEquals(5, x)</code></td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>with pytest.raises(E):</code></td><td><code>assertThrows(E.class, () -&gt; ...)</code></td></tr>
+</table>
+
+<p class="source">
+  <a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests">JUnit 5 — Writing Tests</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0023-tdd-junit.html">← Lesson 23</a></span>
+  <span><a href="java-maven.html">Maven reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

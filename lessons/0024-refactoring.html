@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 24 — Refactoring</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 24 · eXtreme Programming</p>
+<h1>Refactoring</h1>
+<p><em>One idea: improve the code's structure without changing what it does — with tests proving you didn't break it.</em></p>
+
+<div class="callout callout-mission">
+  Refactoring is the "R" in red-green-<strong>refactor</strong>. It means cleaning up working code —
+  better names, less duplication, smaller methods — while its behaviour stays identical. This is why
+  you wrote tests first: they're the safety net that lets you change code fearlessly.
+</div>
+
+<h2>The definition (and the rule)</h2>
+<p>
+<strong>Refactoring = changing the internal structure of code without changing its external
+behaviour.</strong> The hard rule: the tests that passed before must still pass after. If behaviour
+changes, that's not refactoring — that's a new feature or a bug.
+</p>
+<p>The loop is tiny: make one small improvement → run the tests → still green → continue. Green after every step means you're never more than one undo away from safety.</p>
+
+<h2>A real refactor: remove duplication in your tests</h2>
+<p>Look at your <code>CalculatorTest.java</code>. Every test starts with the same line:</p>
+<pre><code>@Test void addsTwoNumbers()      { Calculator calc = new Calculator(); ... }
+@Test void subtractsTwoNumbers() { Calculator calc = new Calculator(); ... }
+@Test void multiplyTwoNumbers()  { Calculator calc = new Calculator(); ... }
+// ...the same `new Calculator()` repeated in every test</code></pre>
+<p>That repetition is <strong>duplication</strong> — a classic refactoring target ("DRY": Don't Repeat Yourself). JUnit gives us a tool to remove it: a method marked <code>@BeforeEach</code> runs automatically before <em>every</em> test.</p>
+
+<pre><code>import org.junit.jupiter.api.BeforeEach;     // add this import
+
+public class CalculatorTest {
+
+    Calculator calc;                  // one field, shared by the tests
+
+    @BeforeEach
+    void setUp() {
+        calc = new Calculator();      // runs fresh before EACH test
+    }
+
+    @Test
+    void addsTwoNumbers() {
+        assertEquals(5, calc.add(2, 3));    // no more `new Calculator()` here
+    }
+    // ...the other tests lose their duplicated line too
+}</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  After this change, run <code>mvn test</code> — <strong>still all green</strong>. You changed the code's
+  structure (removed five duplicated lines, added a setup method) but <em>not</em> its behaviour: the same
+  tests check the same things. That "still green" is the proof that makes refactoring safe. Without tests,
+  you'd be guessing.
+</div>
+
+<h2>Common refactorings</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Refactoring</th><th>What</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Rename</td><td>give a variable/method a clearer name</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Extract method</td><td>pull a chunk of code into its own well-named method</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Remove duplication (DRY)</td><td>one source of truth instead of copy-paste</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Inline / simplify</td><td>delete needless indirection or complexity</td></tr>
+</table>
+<p><em>Python comparison:</em> refactoring is language-agnostic; <code>@BeforeEach</code> is JUnit's version of a pytest <code>fixture</code> that prepares fresh state for each test.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">Refactoring changes a program's…</div>
+  <button class="opt" data-explain="Behaviour must stay the same — that's the rule.">behaviour, to add features</button>
+  <button class="opt" data-explain="Right — internal structure, behaviour unchanged.">structure, not its behaviour</button>
+  <button class="opt" data-explain="It's not about the test results changing.">tests, to make them pass</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">After a refactor, the tests should…</div>
+  <button class="opt" data-explain="Right — green before and after proves behaviour is unchanged.">still all pass, unchanged</button>
+  <button class="opt" data-explain="If they now fail, you changed behaviour — not a clean refactor.">start failing</button>
+  <button class="opt" data-explain="You don't rewrite tests to fit; behaviour is fixed.">be rewritten to match</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">A method marked <code>@BeforeEach</code> runs…</div>
+  <button class="opt" data-explain="Not once total — before each test.">once for the whole class</button>
+  <button class="opt" data-explain="It runs before, not after.">after every test</button>
+  <button class="opt" data-explain="Right — before each individual test method.">before every test</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (in hello-maven)</h2>
+<ol>
+  <li>Run <code>mvn test</code> first and note the green count — that's your baseline.</li>
+  <li>Refactor <code>CalculatorTest.java</code>: add the <code>@BeforeEach</code> import, add a <code>calc</code> field and a <code>setUp()</code> method, and delete the repeated <code>Calculator calc = new Calculator();</code> from each test.</li>
+  <li>Run <code>mvn test</code> again — confirm the <strong>same</strong> green count. Same behaviour, cleaner code. That's a successful refactor.</li>
+  <li>One more: rename a test to describe its behaviour better (e.g. <code>multiplyTwoNumbers</code> → <code>multipliesTwoNumbers</code>). Re-run — still green.</li>
+</ol>
+
+<p class="source">
+  <a href="https://refactoring.com/">refactoring.com — Martin Fowler</a>, the canonical source on refactoring (catalog of named refactorings).
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. Refactoring and the next topic, <strong>clean code</strong>, are two sides of one
+  coin: clean code is the <em>target</em>, refactoring is the <em>act of getting there safely</em>. Next
+  lesson sharpens what "clean" actually means.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0023-tdd-junit.html">← Lesson 23</a></span>
+  <span><a href="../reference/java-tdd-junit.html">Reference: TDD &amp; JUnit →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

@@ -15,6 +15,10 @@ draw knowledge from here — not from parametric guesses.
   The canonical book on writing idiomatic, robust Java. Use for: once the basics land — best practices, the "why" behind clean Java. Buy it.
 - [Spring Boot Reference Documentation](https://docs.spring.io/spring-boot/index.html)
   Official Spring Boot docs and guides. Use for: when we reach build tooling, dependency injection, REST, and persistence.
+- [Maven — Getting Started Guide](https://maven.apache.org/guides/getting-started/)
+  Official Maven docs. Use for: project layout, `pom.xml`, dependencies, the build lifecycle.
+- [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/)
+  Official JUnit 5 docs. Use for: writing tests, assertions, annotations — the basis of TDD.
 - [_Pro Git_ (2nd ed.) — Chacon & Straub (free online)](https://git-scm.com/book/en/v2)
   The canonical, free Git book. Use for: anything Git — the early chapters (Getting Started, Git Basics, Branching) cover everything a junior needs.
 

@@ -1,0 +1,24 @@
+# A GitHub Actions workflow: runs automatically on GitHub's servers.
+name: CI
+
+# When should it run? On every push and every pull request.
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:                 # one job, with a name
+    runs-on: ubuntu-latest        # GitHub gives us a fresh Linux machine
+    steps:
+      - name: Check out the code  # 1. get the repository onto that machine
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21       # 2. install Java 21 (Temurin, same as yours)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build and run tests # 3. run the Maven tests in the project folder
+        run: mvn -B test
+        working-directory: hello-maven

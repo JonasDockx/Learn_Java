@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 26 — CI/CD</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 26 · eXtreme Programming</p>
+<h1>CI/CD</h1>
+<p><em>One idea: a server automatically builds and tests your code every time you push.</em></p>
+
+<div class="callout callout-mission">
+  You run <code>mvn test</code> by hand. <strong>Continuous Integration (CI)</strong> makes a server do
+  it for you on every push — so a broken test is caught immediately, for everyone, not just when someone
+  remembers to check. It's the automation that ties together everything in this block: tests, build, the
+  whole safety net.
+</div>
+
+<h2>CI and CD</h2>
+<ul>
+  <li><strong>CI — Continuous Integration:</strong> on every push, an automated server checks out your code, builds it, and runs the tests. If anything fails, you (and the team) are told at once.</li>
+  <li><strong>CD — Continuous Delivery/Deployment:</strong> the next step — after tests pass, automatically package and ship the app. As a junior you'll mostly live in CI; CD comes once there's something to deploy.</li>
+</ul>
+<p>Today is CI: your tests, run automatically on GitHub.</p>
+
+<h2>How it works: a workflow file</h2>
+<p>
+GitHub runs CI through <strong>GitHub Actions</strong>. You describe the steps in a YAML file inside your
+repo, at <code>.github/workflows/</code>. GitHub watches for it and runs it on its own servers. I've
+created one for you — open <a href="../.github/workflows/ci.yml">.github/workflows/ci.yml</a>.
+</p>
+<pre><code>name: CI
+on:
+  push:               # run on every push
+  pull_request:       # and every PR
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest        # a fresh Linux machine
+    steps:
+      - uses: actions/checkout@v4         # 1. get the code
+      - uses: actions/setup-java@v4       # 2. install Java 21
+        with: { distribution: temurin, java-version: '21' }
+      - run: mvn -B test                  # 3. run the tests
+        working-directory: hello-maven</code></pre>
+<p>Read it as three steps on a fresh machine: <strong>get the code → install Java → run <code>mvn test</code></strong>. Exactly what you do locally, automated.</p>
+
+<div class="callout callout-key">
+  <h3>YAML — and a Python parallel</h3>
+  <code>.yml</code> is YAML, a config format that, like Python, uses <strong>indentation</strong> to show
+  structure (nesting by spaces, no braces). <code>name:</code>, <code>on:</code>, <code>jobs:</code> are
+  keys; the indented lines under them belong to them. Watch your spaces — YAML is as indentation-sensitive
+  as Python.
+</div>
+
+<h2>What you'll see</h2>
+<p>
+After you push this, GitHub shows an <strong>Actions</strong> tab on your repo. Each push gets a run with
+a green check (passed) or a red X (failed). A failing test turns the check red and emails you — the bug is
+caught the moment it lands, not days later.
+</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">What does Continuous Integration do?</div>
+  <button class="opt" data-explain="It doesn't write code for you.">writes your tests automatically</button>
+  <button class="opt" data-explain="Right — builds and tests on every push, automatically.">builds and tests on every push</button>
+  <button class="opt" data-explain="That's deployment (CD), a later step.">deploys the app to users</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Where does a GitHub Actions workflow file live?</div>
+  <button class="opt" data-explain="Not in the project's src folder.">in src/main/java</button>
+  <button class="opt" data-explain="Not in the Maven target folder.">in the target folder</button>
+  <button class="opt" data-explain="Right — under .github/workflows/.">in .github/workflows/</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">A failing test in CI shows up as…</div>
+  <button class="opt" data-explain="Right — a red X on the run, with a notification.">a red X on the push</button>
+  <button class="opt" data-explain="CI doesn't silently fix code.">an automatic fix</button>
+  <button class="opt" data-explain="It doesn't pass silently — that's the point.">a silent pass</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now</h2>
+<ol>
+  <li>Make sure your <code>hello-maven</code> project and the new <code>.github/workflows/ci.yml</code> are committed. From the repo root: <code>git add .</code>, <code>git commit -m "Add Maven project and CI workflow"</code>.</li>
+  <li><code>git push</code>. Then open your repo on GitHub and click the <strong>Actions</strong> tab — watch the workflow run the three steps and finish with a green check.</li>
+  <li><strong>See CI catch a bug:</strong> break a test (change <code>Calculator.add</code> to <code>a - b</code>), commit, and push. Watch the Actions run go <strong>red</strong>. Then fix it, push again, watch it go green.</li>
+</ol>
+
+<p class="source">
+  <a href="https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven">GitHub Docs — Building &amp; testing Java with Maven</a>. Official guide.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything — YAML indentation errors are the usual first stumble; paste any error and we'll read
+  it. This completes the eXtreme-programming block (TDD, refactoring, clean code, CI/CD). Next on your
+  syllabus: <strong>design principles and patterns</strong>.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0025-clean-code.html">← Lesson 25</a></span>
+  <span><a href="../reference/java-ci-cd.html">Reference: CI/CD →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
