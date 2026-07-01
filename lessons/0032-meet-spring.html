@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 32 — Meet Spring</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 32 · Enterprise · Spring</p>
+<h1>Meet Spring: Injection, Automated</h1>
+<p><em>One idea: Spring creates your objects and injects their dependencies for you — the DIP you just did by hand.</em></p>
+
+<div class="callout callout-mission">
+  You just wrote dependency injection manually: <code>new NotificationService(new EmailSender())</code>.
+  <strong>Spring</strong> does exactly that wiring automatically, for a whole application. Its core is an
+  <strong>IoC container</strong> — a manager that builds your objects and plugs them into each other. I've
+  scaffolded a tiny Spring app at <code>spring-demo/</code> that proves it. This is the gateway to enterprise Java.
+</div>
+
+<div class="callout callout-key">
+  <h3>First: run it (in a terminal, inside spring-demo/)</h3>
+  <pre><code>cd spring-demo
+mvn spring-boot:run</code></pre>
+  Among Spring's start-up logs you'll see one line from <em>your</em> code:
+  <pre><code>Email: Hello from Spring</code></pre>
+  Nothing in your code called <code>new</code>. Spring built and connected everything. Press <code>Ctrl+C</code> to stop.
+</div>
+
+<h2>What just happened</h2>
+<p>Spring's <strong>IoC container</strong> (Inversion of Control) took over object creation. On start-up it:</p>
+<ol>
+  <li>Scanned your package for classes marked as components.</li>
+  <li>Created one instance of each (these managed objects are called <strong>beans</strong>).</li>
+  <li>Looked at each constructor, saw what it needed, and <strong>injected</strong> the matching bean.</li>
+</ol>
+<p>So <code>EmailSender</code> was injected into <code>NotificationService</code>, which was injected into <code>AppRunner</code> — a whole chain wired automatically. That "the framework controls creation, not your code" is the <em>Inversion</em> of Control.</p>
+
+<h2>The annotations that make it work</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Annotation</th><th>Means</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>@SpringBootApplication</code></td><td>the entry point; start the container and scan this package</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>@Component</code></td><td>"Spring, manage a bean of this class" (e.g. <code>EmailSender</code>)</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><code>@Service</code></td><td><code>@Component</code> that reads as "business logic" (e.g. <code>NotificationService</code>)</td></tr>
+</table>
+<p>The injection itself needs <em>no</em> annotation: Spring sees a constructor that takes a <code>MessageSender</code> and supplies the bean that fits. It's the constructor injection you already wrote — now automatic.</p>
+
+<h2>New: real packages</h2>
+<p>Notice the files start with <code>package com.jonas.demo;</code> and live in folders <code>src/main/java/com/jonas/demo/</code>. A <strong>package</strong> is a named namespace (Lesson: Java's namespace is the package). Spring scans the entry class's package and below, so real apps always use packages — the folder path must match the package name.</p>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  You declare <em>what</em> your components are (<code>@Component</code>) and <em>what they need</em>
+  (constructor parameters). Spring figures out <em>how</em> to build and connect them. You stop writing
+  wiring code (<code>new</code> chains) and let the container do it — which is what makes big applications
+  manageable. DIP was the principle; Spring is the machine that runs on it.
+</div>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">What does Spring's IoC container do?</div>
+  <button class="opt" data-explain="It doesn't write your classes for you.">writes your classes</button>
+  <button class="opt" data-explain="Right — creates your objects and injects dependencies.">creates and wires your objects</button>
+  <button class="opt" data-explain="It's not a database.">stores your data</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">A class marked <code>@Component</code> becomes…</div>
+  <button class="opt" data-explain="It's not a test.">a unit test</button>
+  <button class="opt" data-explain="It's not a config file.">a configuration file</button>
+  <button class="opt" data-explain="Right — a bean Spring creates and manages.">a bean Spring manages</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">How does <code>NotificationService</code> get its <code>MessageSender</code>?</div>
+  <button class="opt" data-explain="Right — Spring injects the matching bean into the constructor.">Spring injects it via the constructor</button>
+  <button class="opt" data-explain="There's no `new` in the service.">it calls new itself</button>
+  <button class="opt" data-explain="It isn't a global lookup.">it reads a global variable</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now</h2>
+<ol>
+  <li>Run <code>mvn spring-boot:run</code> in <code>spring-demo/</code>. Find the <code>Email: Hello from Spring</code> line in the logs.</li>
+  <li>Change the message in <code>AppRunner.run(...)</code> and re-run — confirm your new text appears.</li>
+  <li><strong>See injection swap with no wiring change:</strong> add an <code>SmsSender</code> class (<code>@Component implements MessageSender</code>) that prints <code>"SMS: " + message</code>. Because there'd now be <em>two</em> <code>MessageSender</code> beans, add <code>@Primary</code> above one of them so Spring knows which to inject. Re-run and watch the output switch — you changed a bean, not the service.</li>
+</ol>
+
+<p class="source">
+  <a href="https://docs.spring.io/spring-boot/tutorials/first-application.html">Spring Boot — Your First Application</a>. Official guide.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything — Spring introduces a lot of vocabulary (bean, container, injection). We'll take it
+  slowly. Next: <strong>Spring Boot web</strong> — turning this into a real web app that answers HTTP requests
+  (<strong>RESTful web services</strong> on your syllabus).
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0031-dependency-inversion.html">← Lesson 31</a></span>
+  <span><a href="../reference/java-spring-intro.html">Reference: Spring intro →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

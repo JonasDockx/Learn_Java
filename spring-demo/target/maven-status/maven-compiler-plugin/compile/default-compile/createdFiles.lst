@@ -1,0 +1,5 @@
+com\jonas\demo\DemoApplication.class
+com\jonas\demo\MessageSender.class
+com\jonas\demo\AppRunner.class
+com\jonas\demo\EmailSender.class
+com\jonas\demo\NotificationService.class

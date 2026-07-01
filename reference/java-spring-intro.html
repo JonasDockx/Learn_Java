@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Spring Intro (IoC &amp; DI)</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>Spring: IoC &amp; Dependency Injection</h1>
+<p><em>Spring creates and wires your objects. Print this.</em></p>
+
+<h2>Vocabulary</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Term</th><th>Means</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">IoC container</td><td>Spring's manager that builds + wires your objects</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Bean</td><td>an object the container creates and manages</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Dependency injection</td><td>the container passing a bean's dependencies in</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;">Component scanning</td><td>Spring finding your annotated classes to register</td></tr>
+</table>
+
+<h2>Core annotations</h2>
+<pre><code>@SpringBootApplication      // entry point; starts container, scans package
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+
+@Component                   // "manage a bean of this class"
+public class EmailSender implements MessageSender { ... }
+
+@Service                     // @Component that means "business logic"
+public class NotificationService {
+    private final MessageSender sender;
+    public NotificationService(MessageSender sender) {   // injected — no annotation needed
+        this.sender = sender;
+    }
+}</code></pre>
+
+<h2>How wiring happens</h2>
+<pre><code>start  →  scan package for @Component/@Service  →
+  create one bean each  →  read each constructor  →  inject matching beans</code></pre>
+<p>No <code>new</code> in your code. If two beans fit one type, mark one <code>@Primary</code>.</p>
+
+<h2>Packages (required)</h2>
+<pre><code>package com.jonas.demo;   // top of every file
+// folder path must match:  src/main/java/com/jonas/demo/</code></pre>
+<p>Spring scans the entry class's package and below — so real apps use packages, not the default one.</p>
+
+<h2>Run it</h2>
+<pre><code>cd spring-demo
+mvn spring-boot:run       # start the app (Ctrl+C to stop)</code></pre>
+
+<div class="callout callout-key">
+  <h3>The big picture</h3>
+  You declare <em>what</em> exists (<code>@Component</code>) and <em>what it needs</em> (constructor params);
+  Spring works out <em>how</em> to build and connect it. It's the Dependency Inversion Principle, automated.
+</div>
+
+<p class="source">
+  <a href="https://docs.spring.io/spring-boot/tutorials/first-application.html">Spring Boot — First Application</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0032-meet-spring.html">← Lesson 32</a></span>
+  <span><a href="java-solid.html">SOLID reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>

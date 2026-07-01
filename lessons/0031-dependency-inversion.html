@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 31 — Dependency Inversion Principle</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 31 · Design &amp; Architecture</p>
+<h1>Dependency Inversion Principle</h1>
+<p><em>One idea: depend on an interface, and have the concrete thing handed to you — don't build it yourself.</em></p>
+
+<div class="callout callout-mission">
+  The "D" of SOLID, and the most important for where you're headed: this is the principle <strong>Spring is
+  built on</strong>. Master the shape here and Spring's "dependency injection" will look familiar instead of
+  magical. It ties together interfaces (12), Open/Closed (28), and testability (TDD).
+</div>
+
+<h2>The problem: welded to a concrete class</h2>
+<pre><code>class EmailSender {
+    void send(String message) { /* ...email... */ }
+}
+
+class NotificationService {
+    private EmailSender sender = new EmailSender();   // ← creates its own dependency
+
+    void alert(String message) {
+        sender.send(message);
+    }
+}</code></pre>
+<p>
+<code>NotificationService</code> is <strong>welded</strong> to <code>EmailSender</code>: it names the concrete
+class and builds it with <code>new</code>. You can't switch to SMS without editing this class, and you can't
+test it without really sending emails. The high-level service depends directly on a low-level detail.
+</p>
+
+<h2>The fix: depend on an abstraction, receive the concrete one</h2>
+<pre><code>interface MessageSender {                 // the abstraction
+    void send(String message);
+}
+
+class EmailSender implements MessageSender {
+    public void send(String message) { /* ...email... */ }
+}
+class SmsSender implements MessageSender {
+    public void send(String message) { /* ...SMS... */ }
+}
+
+class NotificationService {
+    private final MessageSender sender;
+
+    NotificationService(MessageSender sender) {   // ← handed in, not created here
+        this.sender = sender;
+    }
+
+    void alert(String message) {
+        sender.send(message);                     // works with ANY MessageSender
+    }
+}</code></pre>
+
+<p>Now the caller decides which sender to use and passes it in:</p>
+<pre><code>var service = new NotificationService(new EmailSender());   // or new SmsSender()
+service.alert("Hello");</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight — the "inversion"</h3>
+  Before, <code>NotificationService</code> controlled its own dependency (<code>new EmailSender()</code>). Now
+  it just declares "<em>I need some <code>MessageSender</code></em>" and something <strong>outside</strong>
+  supplies it through the constructor. Control of the dependency is <strong>inverted</strong> — handed to the
+  caller. Passing a dependency in like this is called <strong>dependency injection</strong>.
+</div>
+
+<h2>Why this is a big deal</h2>
+<ul>
+  <li><strong>Swappable:</strong> pass <code>SmsSender</code> instead of <code>EmailSender</code> — no change to <code>NotificationService</code>.</li>
+  <li><strong>Testable:</strong> in a test, pass a fake <code>MessageSender</code> that just records the message — no real emails. This is how you unit-test with TDD.</li>
+  <li><strong>This is Spring:</strong> Spring automatically <em>creates</em> your objects and <em>injects</em> the right dependencies into their constructors. DIP is the manual version of what Spring does for you — which is why it comes right before the Spring block.</li>
+</ul>
+<p><em>Python comparison:</em> exactly the "pass collaborators in rather than hardcode them" pattern; Java + Spring just automate the wiring.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">Dependency Inversion says a class should depend on…</div>
+  <button class="opt" data-explain="Depending on the concrete class is the problem it fixes.">a specific concrete class</button>
+  <button class="opt" data-explain="Right — an abstraction (interface), not a concrete detail.">an interface (abstraction)</button>
+  <button class="opt" data-explain="It's not about avoiding all dependencies.">nothing at all</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">"Dependency injection" means a class gets its dependency…</div>
+  <button class="opt" data-explain="Creating it with new inside is what we're avoiding.">by building it with new</button>
+  <button class="opt" data-explain="Not from a global — it's passed in explicitly.">from a global variable</button>
+  <button class="opt" data-explain="Right — passed in from outside (e.g. the constructor).">passed in from outside</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">A key testing benefit of injecting a <code>MessageSender</code> is…</div>
+  <button class="opt" data-explain="Right — pass a fake sender in the test, no real emails.">you can pass a fake in tests</button>
+  <button class="opt" data-explain="It doesn't change execution speed meaningfully.">tests run faster</button>
+  <button class="opt" data-explain="Injection doesn't remove the need for tests.">you need no tests</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (fill in the injection — write it and send it)</h2>
+<p>Given this interface and sender, rewrite <code>NotificationService</code> so it (1) stores a <code>MessageSender</code> field and (2) receives it through its constructor, then uses it in <code>alert</code>. Also write the one line that creates the service with an <code>EmailSender</code>.</p>
+<pre><code>interface MessageSender { void send(String message); }
+
+class EmailSender implements MessageSender {
+    public void send(String message) { System.out.println("Email: " + message); }
+}
+
+class NotificationService {
+    // TODO: a MessageSender field
+    // TODO: a constructor that receives a MessageSender
+    void alert(String message) {
+        // TODO: use the sender
+    }
+}</code></pre>
+<p>Hint: mirror the pattern above — <code>private final MessageSender sender;</code>, a constructor <code>NotificationService(MessageSender sender) { this.sender = sender; }</code>, and <code>sender.send(message);</code> in <code>alert</code>.</p>
+
+<p class="source">
+  <a href="https://en.wikipedia.org/wiki/Dependency_inversion_principle">Dependency Inversion Principle</a> — overview.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. That completes SOLID. Next block on your syllabus is <strong>design patterns</strong>,
+  then the big one — <strong>Spring &amp; Spring Boot</strong>, where this exact injection is done for you
+  automatically. You're right at the doorway to enterprise Java.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0030-interface-segregation.html">← Lesson 30</a></span>
+  <span><a href="../reference/java-solid.html">Reference: SOLID →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

@@ -19,7 +19,7 @@
   <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>O</strong></td><td>Open/Closed</td><td>open to extension, closed to modification ✓ Lesson 28</td></tr>
   <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>L</strong></td><td>Liskov Substitution</td><td>subtypes must be usable as their base type ✓ Lesson 29</td></tr>
   <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>I</strong></td><td>Interface Segregation</td><td>many small interfaces beat one fat one ✓ Lesson 30</td></tr>
-  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>D</strong></td><td>Dependency Inversion</td><td>depend on abstractions, not concretions</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>D</strong></td><td>Dependency Inversion</td><td>depend on abstractions, not concretions ✓ Lesson 31</td></tr>
 </table>
 
 <h2>S — Single Responsibility</h2>
@@ -73,6 +73,19 @@ interface Scanner { void scan(); }
 class SimplePrinter implements Printer { public void print() {} }
 class AllInOne implements Printer, Scanner { ... }</code></pre>
 <p><strong>Smell:</strong> methods that throw "unsupported" (also a Liskov alarm) — the interface is too big.</p>
+
+<h2>D — Dependency Inversion</h2>
+<p>Depend on <strong>abstractions</strong>, not concrete classes; have dependencies <strong>injected</strong> (passed in) rather than created with <code>new</code> inside.</p>
+<pre><code>// before: welded to a concrete class
+class NotificationService { EmailSender sender = new EmailSender(); }
+
+// after: depends on an interface, receives the concrete one
+interface MessageSender { void send(String m); }
+class NotificationService {
+    private final MessageSender sender;
+    NotificationService(MessageSender sender) { this.sender = sender; }  // injected
+}</code></pre>
+<p><strong>Payoff:</strong> swappable implementations, testable with fakes. <strong>This is what Spring automates</strong> — it creates objects and injects their dependencies for you.</p>
 
 <p class="source">
   <a href="https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html">Robert C. Martin — on SOLID</a>.
