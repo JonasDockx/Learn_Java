@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 28 — Open/Closed Principle</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 28 · Design &amp; Architecture</p>
+<h1>Open/Closed Principle</h1>
+<p><em>One idea: add new behaviour by writing new code, not by editing existing code.</em></p>
+
+<div class="callout callout-mission">
+  The "O" of SOLID: code should be <strong>open for extension, closed for modification</strong>. You should
+  be able to add a new case without reopening and risking the code that already works. This is the payoff of
+  the interfaces and polymorphism you learned in Lessons 12 and 8 — now as a design principle.
+</div>
+
+<h2>The smell: an <code>if/else</code> that grows forever</h2>
+<pre><code>class Notifier {
+    void send(String type, String message) {
+        if (type.equals("email")) {
+            // ...send an email...
+        } else if (type.equals("sms")) {
+            // ...send an SMS...
+        }
+        // want push notifications? EDIT this method again.
+    }
+}</code></pre>
+<p>
+Every new channel means <strong>reopening</strong> <code>Notifier</code> and adding another branch — risking
+the branches that already work, and forcing a re-test of the whole thing. The class is <em>closed</em> to
+easy extension and <em>open</em> to accidental breakage. Backwards.
+</p>
+
+<h2>The fix: an interface each new case implements</h2>
+<pre><code>interface Channel {
+    void send(String message);       // the contract
+}
+
+class EmailChannel implements Channel {
+    public void send(String message) { /* ...email... */ }
+}
+
+class SmsChannel implements Channel {
+    public void send(String message) { /* ...SMS... */ }
+}
+
+class Notifier {
+    void notify(Channel channel, String message) {
+        channel.send(message);       // doesn't care which channel — polymorphism
+    }
+}</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  To add push notifications, you write a <strong>new</strong> class <code>PushChannel implements Channel</code>
+  — and <strong>touch nothing that already exists</strong>. <code>Notifier</code>, <code>EmailChannel</code>,
+  <code>SmsChannel</code> are all untouched and un-retested. That's "open for extension" (new classes) and
+  "closed for modification" (existing code stays put). The interface is the seam that makes it possible.
+</div>
+
+<h2>Why it matters</h2>
+<p>Code you don't modify is code you can't break. Adding features by adding classes — rather than editing crowded methods — keeps existing, tested behaviour safe. It also plugs into polymorphism: <code>Notifier</code> works with <em>any</em> <code>Channel</code>, including ones that don't exist yet.</p>
+<p><em>Python comparison:</em> same principle; Python often reaches it through duck typing, Java through a shared interface the compiler checks.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">"Open for extension, closed for modification" means…</div>
+  <button class="opt" data-explain="You avoid editing existing code, not adding any.">never add new code</button>
+  <button class="opt" data-explain="Right — add new code; don't edit what works.">add behaviour without editing existing code</button>
+  <button class="opt" data-explain="It's not about access modifiers.">make every field public</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">A growing <code>if/else</code> on a "type" string usually signals…</div>
+  <button class="opt" data-explain="It's not a performance issue primarily.">a speed problem</button>
+  <button class="opt" data-explain="Encapsulation is about hiding data, a different concern.">missing encapsulation</button>
+  <button class="opt" data-explain="Right — each new case forces editing; use an interface.">an Open/Closed violation</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">With the interface design, adding a new channel means…</div>
+  <button class="opt" data-explain="Right — a new class implementing Channel, nothing else edited.">writing one new class</button>
+  <button class="opt" data-explain="You specifically avoid editing Notifier.">editing the Notifier method</button>
+  <button class="opt" data-explain="No existing class needs deleting.">deleting an old class</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (refactor — write it and send it)</h2>
+<p>Here's an Open/Closed violation. Refactor it to an interface-based design so a new shape needs no edit to existing code. Write the interface and two shape classes (you can keep the area formulas simple), and show how the caller uses them. Paste it in the chat.</p>
+<pre><code>class AreaCalculator {
+    double area(String shape, double size) {
+        if (shape.equals("square")) return size * size;
+        else if (shape.equals("circle")) return 3.14 * size * size;
+        // new shape → edit here (the smell)
+    }
+}</code></pre>
+<p>Hint: an interface <code>Shape</code> with a <code>double area()</code> method; <code>Square</code> and <code>Circle</code> implement it; the caller just calls <code>shape.area()</code>.</p>
+
+<p class="source">
+  <a href="https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle">Open–Closed Principle</a> — overview and history.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. Next SOLID lessons: L (Liskov), I (Interface Segregation), and D (Dependency Inversion)
+  — D is the big one, the idea Spring is built on. They all lean on interfaces, which you now use comfortably.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0027-single-responsibility.html">← Lesson 27</a></span>
+  <span><a href="../reference/java-solid.html">Reference: SOLID →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

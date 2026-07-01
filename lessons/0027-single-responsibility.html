@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 27 — Single Responsibility Principle</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 27 · Design &amp; Architecture</p>
+<h1>Single Responsibility Principle</h1>
+<p><em>One idea: a class should do one job — have one reason to change.</em></p>
+
+<div class="callout callout-mission">
+  <strong>Design principles</strong> are guidelines for structuring code so it stays easy to change. The
+  most famous set is <strong>SOLID</strong> — five principles, which we'll take one lesson at a time. This
+  is the first, the "S": <strong>Single Responsibility</strong>. It's clean code's "do one thing," lifted
+  from methods up to whole classes.
+</div>
+
+<h2>The principle</h2>
+<p>
+A class should have <strong>one responsibility</strong> — Robert Martin's phrasing: <em>one reason to
+change</em>. If you can describe a class with "it does X <em>and</em> Y <em>and</em> Z", those "and"s are
+a warning: it's holding multiple jobs, and a change to one risks breaking the others.
+</p>
+
+<h2>Before: a class doing too much</h2>
+<pre><code>class Invoice {
+    // responsibility 1: the data + business calculation
+    private double amount;
+    double total() { return amount * 1.21; }   // adds tax
+
+    // responsibility 2: presentation
+    void printToConsole() { System.out.println("Total: " + total()); }
+
+    // responsibility 3: persistence
+    void saveToDatabase() { /* ...SQL... */ }
+}</code></pre>
+<p>This <code>Invoice</code> has <strong>three reasons to change</strong>: the tax rule, the print format, and how it's stored. A change to the database code sits right next to the business logic, easy to break by accident. It's also hard to test one part in isolation.</p>
+
+<h2>After: one responsibility each</h2>
+<pre><code>class Invoice {                       // just the data + calculation
+    private double amount;
+    double total() { return amount * 1.21; }
+}
+
+class InvoicePrinter {                // just presentation
+    void print(Invoice invoice) { System.out.println("Total: " + invoice.total()); }
+}
+
+class InvoiceRepository {             // just persistence
+    void save(Invoice invoice) { /* ...SQL... */ }
+}</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  Now each class has <strong>one reason to change</strong>: change the tax rule → only <code>Invoice</code>;
+  change the output → only <code>InvoicePrinter</code>; change storage → only <code>InvoiceRepository</code>.
+  Smaller, focused classes are easier to understand, test, and change without surprises. (This separation —
+  data vs. presentation vs. persistence — is exactly how Spring apps are structured, coming up later.)
+</div>
+
+<h2>The heuristic</h2>
+<p>Ask: <em>"what would force me to edit this class?"</em> If the answer has an "and" in it — "if the tax rule changes <em>and</em> if the report format changes" — it's doing too much. One reason to change = one responsibility.</p>
+<p><em>Python comparison:</em> SRP is language-agnostic — the same "one module, one job" instinct behind well-structured Python packages.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">The Single Responsibility Principle says a class should have…</div>
+  <button class="opt" data-explain="Methods can be several; it's about one job/reason to change.">exactly one method</button>
+  <button class="opt" data-explain="Right — one responsibility / one reason to change.">one reason to change</button>
+  <button class="opt" data-explain="Field count isn't the measure.">no fields at all</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">A class that calculates totals, prints them, and saves them to a DB…</div>
+  <button class="opt" data-explain="It's the opposite of focused.">follows SRP well</button>
+  <button class="opt" data-explain="The problem isn't speed.">is just slow</button>
+  <button class="opt" data-explain="Right — three responsibilities; split it.">has too many responsibilities</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">A good test for SRP is asking…</div>
+  <button class="opt" data-explain="Right — more than one reason means more than one job.">"what would force me to change this class?"</button>
+  <button class="opt" data-explain="Line count isn't the principle.">"how many lines is it?"</button>
+  <button class="opt" data-explain="Speed isn't what SRP measures.">"how fast does it run?"</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (a design exercise — answer in chat)</h2>
+<p>Here's a class with mixed responsibilities. <strong>Identify each separate responsibility</strong>, and say <strong>how you'd split it</strong> (what classes you'd create). No need to write full code — describe the split, then send it to me.</p>
+<pre><code>class UserAccount {
+    String name;
+    String email;
+
+    boolean isValidEmail() { return email.contains("@"); }   // validation
+    void saveToDatabase()  { /* ...SQL... */ }                // persistence
+    void sendWelcomeEmail(){ /* ...SMTP... */ }               // emailing
+}</code></pre>
+<p>Hint: how many different reasons could force you to edit this class? Each one is a responsibility that could become its own class.</p>
+
+<p class="source">
+  <a href="https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html">Robert C. Martin — The Single Responsibility Principle</a>. The source of the "one reason to change" definition.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. We'll cover the other four SOLID principles in small lessons — the next, <strong>Open/Closed</strong>
+  and later <strong>Dependency Inversion</strong>, lead directly into how Spring works. SRP is the foundation they all build on.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0026-ci-cd.html">← Lesson 26</a></span>
+  <span><a href="../reference/java-solid.html">Reference: SOLID →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

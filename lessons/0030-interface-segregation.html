@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 30 — Interface Segregation Principle</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 30 · Design &amp; Architecture</p>
+<h1>Interface Segregation Principle</h1>
+<p><em>One idea: many small, focused interfaces beat one big "do everything" interface.</em></p>
+
+<div class="callout callout-mission">
+  The "I" of SOLID — and you've already used it. When you moved <code>fly()</code> out of <code>Bird</code>
+  into a <code>Flyer</code> interface so ostriches weren't forced to implement it, that was interface
+  segregation. This lesson names the principle and its smell.
+</div>
+
+<h2>The principle</h2>
+<p>
+<strong>No class should be forced to implement methods it doesn't use.</strong> A big interface that bundles
+unrelated abilities forces every implementer to provide all of them — even the ones that make no sense for it.
+Split the fat interface into small, focused ones.
+</p>
+
+<h2>The smell: a fat interface</h2>
+<pre><code>interface MultiFunctionDevice {
+    void print();
+    void scan();
+    void fax();
+}
+
+// A simple printer can only print — but it's forced to implement all three:
+class SimplePrinter implements MultiFunctionDevice {
+    public void print() { /* ...ok... */ }
+    public void scan()  { throw new UnsupportedOperationException(); }   // forced, fake
+    public void fax()   { throw new UnsupportedOperationException(); }   // forced, fake
+}</code></pre>
+<p>
+Those thrown methods are the giveaway — and notice it's also the <strong>Liskov</strong> alarm from last
+lesson. The fat interface <em>caused</em> the violation: it forced <code>SimplePrinter</code> to fake abilities
+it doesn't have.
+</p>
+
+<h2>The fix: small, focused interfaces</h2>
+<pre><code>interface Printer { void print(); }
+interface Scanner { void scan(); }
+interface Fax     { void fax(); }
+
+class SimplePrinter implements Printer {           // only what it can do
+    public void print() { /* ... */ }
+}
+
+class OfficeAllInOne implements Printer, Scanner, Fax {   // implements many
+    public void print() { /* ... */ }
+    public void scan()  { /* ... */ }
+    public void fax()   { /* ... */ }
+}</code></pre>
+
+<div class="callout callout-key">
+  <h3>The key insight</h3>
+  Each class implements <strong>exactly the interfaces it can honour</strong> — no fakes, no thrown "unsupported".
+  A capable device implements several small interfaces (remember: a class can <code>implements</code> many). This
+  is why interfaces should be small and role-focused, not giant catch-alls.
+</div>
+
+<h2>Why it matters</h2>
+<p>Small interfaces mean code depends only on the abilities it actually needs. A method that just prints can take a <code>Printer</code> — it doesn't drag in scanning and faxing it will never call. Less coupling, fewer fake methods, no Liskov violations.</p>
+<p><em>Python comparison:</em> the same instinct as small, focused <code>Protocol</code>s rather than one huge base class.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">Interface Segregation says interfaces should be…</div>
+  <button class="opt" data-explain="Bundling everything is the anti-pattern here.">big and comprehensive</button>
+  <button class="opt" data-explain="Right — small and role-focused, so no one implements unused methods.">small and focused</button>
+  <button class="opt" data-explain="Interfaces don't hold state at all.">full of fields</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">A class forced to <code>throw new UnsupportedOperationException()</code> for interface methods signals…</div>
+  <button class="opt" data-explain="It's not a speed issue.">a performance bug</button>
+  <button class="opt" data-explain="The syntax is fine; the design isn't.">a syntax error</button>
+  <button class="opt" data-explain="Right — a fat interface forcing unused methods.">an interface too big for it</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">A device that prints and scans (but not fax) should…</div>
+  <button class="opt" data-explain="Right — implement Printer and Scanner only.">implement two small interfaces</button>
+  <button class="opt" data-explain="That forces a fake fax() method.">implement one big interface</button>
+  <button class="opt" data-explain="Interfaces are exactly the tool here.">avoid interfaces entirely</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (split it — answer in chat)</h2>
+<p>Here's a fat interface. Split it into focused interfaces, and say which interface(s) each class below would implement. Describe it (or write the interfaces) and send it to me.</p>
+<pre><code>interface Worker {
+    void work();
+    void eat();
+    void sleep();
+}
+
+// classes that would implement it:
+//   HumanWorker  — works, eats, sleeps
+//   RobotWorker  — only works (doesn't eat or sleep)</code></pre>
+<p>Hint: what is <code>RobotWorker</code> forced to fake with the fat interface? Which small interfaces remove that?</p>
+
+<p class="source">
+  <a href="https://en.wikipedia.org/wiki/Interface_segregation_principle">Interface Segregation Principle</a> — overview.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. Last SOLID principle next: <strong>D — Dependency Inversion</strong>. It's the most
+  important for your goals — it's the idea that makes Spring's dependency injection work, so it's the bridge
+  into the enterprise block.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0029-liskov-substitution.html">← Lesson 29</a></span>
+  <span><a href="../reference/java-solid.html">Reference: SOLID →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

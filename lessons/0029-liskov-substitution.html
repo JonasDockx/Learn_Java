@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 29 — Liskov Substitution Principle</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Lesson 29 · Design &amp; Architecture</p>
+<h1>Liskov Substitution Principle</h1>
+<p><em>One idea: a subclass must work anywhere its parent is expected — without breaking what callers rely on.</em></p>
+
+<div class="callout callout-mission">
+  The "L" of SOLID. Inheritance (Lesson 8) says a <code>Dog</code> is-a <code>Animal</code>. Liskov adds a
+  condition: the subtype must actually <em>behave</em> like the parent everywhere the parent is used. If code
+  works with an <code>Animal</code> but breaks when you hand it a specific subclass, the inheritance is wrong.
+</div>
+
+<h2>The principle</h2>
+<p>
+Named after Barbara Liskov: if <code>S</code> is a subtype of <code>T</code>, you should be able to use an
+<code>S</code> anywhere a <code>T</code> is expected, and the program should still behave correctly. Subclasses
+must honour the <em>promises</em> their parent makes — not just match method signatures.
+</p>
+
+<h2>A violation</h2>
+<pre><code>class Bird {
+    void fly() { /* ...take off... */ }
+}
+
+class Ostrich extends Bird {
+    @Override
+    void fly() {
+        throw new UnsupportedOperationException("ostriches can't fly");
+    }
+}</code></pre>
+<p>An <code>Ostrich</code> <em>is-a</em> <code>Bird</code> by the class hierarchy, but it breaks the promise. Any code that trusts "a Bird can fly" blows up when handed an Ostrich:</p>
+<pre><code>void migrate(Bird bird) {
+    bird.fly();          // fine for a Sparrow... crashes for an Ostrich
+}</code></pre>
+<p>The Ostrich is <strong>not substitutable</strong> for a Bird. That's the violation — the hierarchy lied about what an Ostrich can do.</p>
+
+<div class="callout callout-key">
+  <h3>The tell-tale sign</h3>
+  When a subclass <strong>overrides a method to throw, or to do nothing</strong>, or otherwise contradicts what
+  the parent promised — that's the Liskov alarm. It means the "is-a" isn't really true for the behaviour in
+  question.
+</div>
+
+<h2>The fix: model reality honestly</h2>
+<p>Not all birds fly, so <code>fly()</code> doesn't belong on <code>Bird</code>. Pull flying into its own capability (an interface — Lesson 12) that only the birds that fly implement:</p>
+<pre><code>class Bird {
+    void eat() { /* all birds eat */ }
+}
+
+interface Flyer {
+    void fly();
+}
+
+class Sparrow extends Bird implements Flyer {
+    public void fly() { /* ...take off... */ }
+}
+
+class Ostrich extends Bird {
+    // no fly() — and nothing pretends it can
+}</code></pre>
+<p>Now nobody can write code that assumes every <code>Bird</code> flies. Only a <code>Flyer</code> promises <code>fly()</code>, and every <code>Flyer</code> keeps that promise. Substitutability restored.</p>
+<p><em>Python comparison:</em> same idea — a subclass that can't honour its parent's behaviour will surprise callers, duck typing or not.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz" data-answer="1">
+  <div class="q">Liskov Substitution says a subtype must…</div>
+  <button class="opt" data-explain="Matching signatures isn't enough — behaviour must match too.">only match method names</button>
+  <button class="opt" data-explain="Right — behave correctly wherever the parent is used.">be usable anywhere its parent is</button>
+  <button class="opt" data-explain="It's not about having more methods.">add extra methods</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="2">
+  <div class="q">Which is a strong sign of a Liskov violation?</div>
+  <button class="opt" data-explain="Adding fields is normal for subclasses.">a subclass adds a field</button>
+  <button class="opt" data-explain="Constructors are expected in subclasses.">a subclass has a constructor</button>
+  <button class="opt" data-explain="Right — overriding to throw contradicts the parent's promise.">an override that throws "unsupported"</button>
+  <div class="feedback"></div>
+</div>
+
+<div class="quiz" data-answer="0">
+  <div class="q">The fix for the Bird/Ostrich problem is to…</div>
+  <button class="opt" data-explain="Right — move fly() to a Flyer interface only fliers implement.">move fly() into a Flyer interface</button>
+  <button class="opt" data-explain="Deleting Ostrich dodges rather than fixes the modelling.">delete the Ostrich class</button>
+  <button class="opt" data-explain="Making fly() faster doesn't address substitutability.">make fly() run faster</button>
+  <div class="feedback"></div>
+</div>
+
+<h2>Do this now (reason it out — answer in chat)</h2>
+<p>Classic case. A <code>Square</code> extends <code>Rectangle</code>:</p>
+<pre><code>class Rectangle {
+    protected int width, height;
+    void setWidth(int w)  { width = w; }
+    void setHeight(int h) { height = h; }
+    int area() { return width * height; }
+}
+
+class Square extends Rectangle {
+    @Override void setWidth(int w)  { width = w; height = w; }   // keep it square
+    @Override void setHeight(int h) { width = h; height = h; }
+}</code></pre>
+<p>Answer these: A caller does <code>rect.setWidth(5); rect.setHeight(4);</code> then expects <code>area()</code> to be 20. What happens if <code>rect</code> is actually a <code>Square</code>? Why does that violate Liskov? Send me your reasoning.</p>
+
+<p class="source">
+  <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle">Liskov Substitution Principle</a> — overview.
+</p>
+
+<div class="callout callout-ask">
+  Ask about anything. Next: <strong>I (Interface Segregation)</strong> — small focused interfaces over fat ones
+  (you just used this to fix the Bird!) — then <strong>D (Dependency Inversion)</strong>, the one Spring is built on.
+</div>
+
+<div class="lesson-nav">
+  <span><a href="0028-open-closed.html">← Lesson 28</a></span>
+  <span><a href="../reference/java-solid.html">Reference: SOLID →</a></span>
+</div>
+
+<footer>Learn Java · grounded in <a href="../MISSION.md">your mission</a> · built lesson by lesson</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

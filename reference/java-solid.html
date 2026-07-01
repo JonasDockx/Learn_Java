@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — SOLID Principles</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+<p class="kicker">Learn Java · Reference</p>
+<h1>SOLID Principles</h1>
+<p><em>Five design principles for changeable OO code. Print this. (Filled in as we cover each.)</em></p>
+
+<h2>The five</h2>
+<table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+  <tr style="border-bottom:1px solid var(--rule); text-align:left;"><th style="padding:0.4rem;">Letter</th><th>Principle</th><th>One line</th></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>S</strong></td><td>Single Responsibility</td><td>one class, one reason to change ✓ Lesson 27</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>O</strong></td><td>Open/Closed</td><td>open to extension, closed to modification ✓ Lesson 28</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>L</strong></td><td>Liskov Substitution</td><td>subtypes must be usable as their base type ✓ Lesson 29</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>I</strong></td><td>Interface Segregation</td><td>many small interfaces beat one fat one ✓ Lesson 30</td></tr>
+  <tr style="border-bottom:1px solid var(--rule);"><td style="padding:0.4rem;"><strong>D</strong></td><td>Dependency Inversion</td><td>depend on abstractions, not concretions</td></tr>
+</table>
+
+<h2>S — Single Responsibility</h2>
+<p>A class should have <strong>one reason to change</strong>. Mixed responsibilities (data + presentation + persistence) → split into focused classes.</p>
+<pre><code>// before: one class, three jobs
+class Invoice { double total(); void print(); void saveToDatabase(); }
+
+// after: one job each
+class Invoice { double total(); }
+class InvoicePrinter { void print(Invoice i); }
+class InvoiceRepository { void save(Invoice i); }</code></pre>
+<p><strong>Heuristic:</strong> "What would force me to edit this class?" If the answer contains "and", split it.</p>
+
+<div class="callout callout-key">
+  <h3>Why it matters</h3>
+  Focused classes are easier to read, test, and change without side effects. The data/presentation/persistence
+  split is the backbone of how Spring apps are organised (controller / service / repository).
+</div>
+
+<h2>O — Open/Closed</h2>
+<p><strong>Open for extension, closed for modification.</strong> Add new behaviour by writing new classes, not by editing existing ones. A growing <code>if/else</code> on a "type" is the classic violation; an interface is the fix.</p>
+<pre><code>// before: every new channel edits this method
+if (type.equals("email")) {...} else if (type.equals("sms")) {...}
+
+// after: new channel = new class, nothing else edited
+interface Channel { void send(String msg); }
+class EmailChannel implements Channel { ... }
+class SmsChannel   implements Channel { ... }   // add PushChannel later, no edits</code></pre>
+<p><strong>Enabled by:</strong> interfaces + polymorphism (Lessons 8, 12).</p>
+
+<h2>L — Liskov Substitution</h2>
+<p>A subtype must be usable <strong>anywhere its parent is expected</strong>, honouring the parent's promises — not just matching signatures.</p>
+<pre><code>// violation: Ostrich is-a Bird but can't keep the fly() promise
+class Ostrich extends Bird { void fly() { throw new UnsupportedOperationException(); } }
+
+// fix: only fliers promise to fly
+class Bird { void eat() {} }
+interface Flyer { void fly(); }
+class Sparrow extends Bird implements Flyer { public void fly() {} }
+class Ostrich extends Bird { }   // no false promise</code></pre>
+<p><strong>Tell-tale sign:</strong> an override that throws "unsupported" or does nothing contradicts the parent — a Liskov alarm.</p>
+
+<h2>I — Interface Segregation</h2>
+<p><strong>No class should be forced to implement methods it doesn't use.</strong> Split fat interfaces into small, role-focused ones; a class implements only what it can honour (and can implement several).</p>
+<pre><code>// fat: SimplePrinter forced to fake scan()/fax()
+interface MultiFunctionDevice { void print(); void scan(); void fax(); }
+
+// segregated: implement only what applies
+interface Printer { void print(); }
+interface Scanner { void scan(); }
+class SimplePrinter implements Printer { public void print() {} }
+class AllInOne implements Printer, Scanner { ... }</code></pre>
+<p><strong>Smell:</strong> methods that throw "unsupported" (also a Liskov alarm) — the interface is too big.</p>
+
+<p class="source">
+  <a href="https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html">Robert C. Martin — on SOLID</a>.
+</p>
+
+<div class="lesson-nav">
+  <span><a href="../lessons/0027-single-responsibility.html">← Lesson 27</a></span>
+  <span><a href="java-clean-code.html">Clean code reference →</a></span>
+</div>
+
+<footer>Learn Java · reference doc · revisit often</footer>
+</body>
+</html>
